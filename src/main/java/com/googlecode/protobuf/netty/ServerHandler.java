@@ -23,11 +23,9 @@ package com.googlecode.protobuf.netty;
 
 import com.google.protobuf.*;
 import com.google.protobuf.Descriptors.MethodDescriptor;
-import com.googlecode.protobuf.netty.NettyRpcProto;
 import com.googlecode.protobuf.netty.NettyRpcProto.ErrorCode;
 import com.googlecode.protobuf.netty.NettyRpcProto.RpcRequest;
 import com.googlecode.protobuf.netty.NettyRpcProto.RpcResponse;
-import org.apache.log4j.Logger;
 import org.jboss.netty.channel.*;
 import org.jboss.netty.channel.group.ChannelGroup;
 
@@ -37,8 +35,6 @@ import java.util.concurrent.ConcurrentHashMap;
 @ChannelPipelineCoverage("all")
 class ServerHandler extends SimpleChannelUpstreamHandler {
 
-	private static final Logger logger = Logger.getLogger(ServerHandler.class);
-	
 	private final Map<String, Service> serviceMap = new ConcurrentHashMap<String, Service>();
 	private final Map<String, BlockingService> blockingServiceMap = new ConcurrentHashMap<String, BlockingService>();
 
@@ -63,7 +59,7 @@ class ServerHandler extends SimpleChannelUpstreamHandler {
 		String serviceName = request.getServiceName();
 		String methodName = request.getMethodName();
 		
-		logger.info("Received request for serviceName: " + serviceName + ", method: " + methodName);
+		//logger.info("Received request for serviceName: " + serviceName + ", method: " + methodName);
 		
 		if (request.getIsBlockingService()) {
 			BlockingService blockingService = blockingServiceMap.get(serviceName);
@@ -131,7 +127,7 @@ class ServerHandler extends SimpleChannelUpstreamHandler {
 								.setResponseMessage(methodResponse.toByteString())
 								.build());
 						} else {
-							logger.info("service callback returned null message");
+							//logger.info("service callback returned null message");
 							RpcResponse.Builder builder = RpcResponse.newBuilder()
 								.setId(request.getId())
 								.setErrorCode(ErrorCode.RPC_ERROR);
@@ -153,7 +149,7 @@ class ServerHandler extends SimpleChannelUpstreamHandler {
 	
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) {
-		logger.warn("exceptionCaught", e.getCause());
+		//logger.warn("exceptionCaught", e.getCause());
 		RpcResponse.Builder responseBuilder = RpcResponse.newBuilder();
 		if (e.getCause() instanceof NoSuchServiceException) {
 			responseBuilder.setErrorCode(ErrorCode.SERVICE_NOT_FOUND);
@@ -168,7 +164,7 @@ class ServerHandler extends SimpleChannelUpstreamHandler {
 		} else {
 			/* Cannot respond to this exception, because it is not tied
 			 * to a request */
-			logger.info("Cannot respond to handler exception", e.getCause());
+			//logger.info("Cannot respond to handler exception", e.getCause());
 			return;
 		}
 		RpcException ex = (RpcException) e.getCause();
@@ -177,7 +173,7 @@ class ServerHandler extends SimpleChannelUpstreamHandler {
 			responseBuilder.setErrorMessage(ex.getMessage());
 			e.getChannel().write(responseBuilder.build());
 		} else {
-			logger.info("Cannot respond to handler exception", ex);
+			//logger.info("Cannot respond to handler exception", ex);
 		}
 	}
 	
