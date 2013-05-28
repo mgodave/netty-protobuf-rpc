@@ -22,17 +22,18 @@
 package com.googlecode.protobuf.netty;
 
 import com.google.common.base.Supplier;
-import com.googlecode.protobuf.netty.NettyRpcProto;
 import org.jboss.netty.bootstrap.ClientBootstrap;
 import org.jboss.netty.channel.ChannelFactory;
 import org.jboss.netty.channel.ChannelHandler;
 
+import javax.inject.Inject;
 import java.net.SocketAddress;
 
 public class NettyRpcClient {
 
   private final ClientBootstrap bootstrap;
 
+  @Inject
   public NettyRpcClient(ChannelFactory channelFactory) {
     bootstrap = new ClientBootstrap(channelFactory);
     bootstrap.setPipelineFactory(

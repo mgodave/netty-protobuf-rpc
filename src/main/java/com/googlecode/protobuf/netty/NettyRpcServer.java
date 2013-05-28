@@ -31,6 +31,7 @@ import org.jboss.netty.channel.ChannelHandler;
 import org.jboss.netty.channel.group.ChannelGroup;
 import org.jboss.netty.channel.group.DefaultChannelGroup;
 
+import javax.inject.Inject;
 import java.net.SocketAddress;
 
 public class NettyRpcServer {
@@ -40,6 +41,7 @@ public class NettyRpcServer {
   private final ChannelGroup allChannels = new DefaultChannelGroup();
   private final ServerHandler handler = new ServerHandler(allChannels);
 
+  @Inject
   public NettyRpcServer(ChannelFactory channelFactory) {
     bootstrap = new ServerBootstrap(channelFactory);
     bootstrap.setPipelineFactory(
