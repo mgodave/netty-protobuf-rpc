@@ -54,7 +54,7 @@ class ClientHandler implements ChannelDownstreamHandler, ChannelUpstreamHandler 
       if (event.getMessage() instanceof RpcResponse) {
         RpcResponse response = (RpcResponse) event.getMessage();
         RpcCall call = calls.remove(response.getId());
-        if (call != null) {
+        if (call == null) {
           throw new NoRequestIdException();
         }
         call.complete(response);

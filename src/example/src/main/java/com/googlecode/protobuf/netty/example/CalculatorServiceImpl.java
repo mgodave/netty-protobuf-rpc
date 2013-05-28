@@ -21,17 +21,17 @@
  */
 package com.googlecode.protobuf.netty.example;
 
-import org.apache.log4j.Logger;
-
 import com.google.protobuf.RpcCallback;
 import com.google.protobuf.RpcController;
 import com.google.protobuf.ServiceException;
 import com.googlecode.protobuf.netty.example.Calculator.CalcRequest;
 import com.googlecode.protobuf.netty.example.Calculator.CalcResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CalculatorServiceImpl implements Calculator.CalcService.Interface, Calculator.CalcService.BlockingInterface {
 
-	private static final Logger logger = Logger.getLogger(CalculatorServiceImpl.class);
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 	
 	public void add(RpcController controller, CalcRequest request,
 			RpcCallback<CalcResponse> done) {

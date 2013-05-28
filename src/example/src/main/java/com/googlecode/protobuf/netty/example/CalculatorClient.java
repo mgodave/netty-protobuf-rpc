@@ -21,12 +21,6 @@
  */
 package com.googlecode.protobuf.netty.example;
 
-import java.net.InetSocketAddress;
-import java.util.concurrent.Executors;
-
-import org.apache.log4j.BasicConfigurator;
-import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
-
 import com.google.protobuf.RpcCallback;
 import com.google.protobuf.RpcController;
 import com.google.protobuf.ServiceException;
@@ -37,13 +31,15 @@ import com.googlecode.protobuf.netty.example.Calculator.CalcResponse;
 import com.googlecode.protobuf.netty.example.Calculator.CalcService;
 import com.googlecode.protobuf.netty.example.Calculator.CalcService.BlockingInterface;
 import com.googlecode.protobuf.netty.example.Calculator.CalcService.Stub;
+import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
+
+import java.net.InetSocketAddress;
+import java.util.concurrent.Executors;
 
 public class CalculatorClient {
 
 	public static void main(String[] args) {
-		
-		BasicConfigurator.configure();
-		
+
 		NettyRpcClient client = new NettyRpcClient(
 				new NioClientSocketChannelFactory(
 						Executors.newCachedThreadPool(), 
