@@ -24,6 +24,7 @@
 
 option java_package = "com.googlecode.protobuf.netty";
 option java_outer_classname = "NettyRpcProto";
+option java_generic_services = true;
 
 // This is default, but it's nice to be explicit
 option optimize_for = SPEED;
