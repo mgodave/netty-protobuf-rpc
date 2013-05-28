@@ -21,21 +21,17 @@
  */
 package com.googlecode.protobuf.netty.example;
 
-import java.net.InetSocketAddress;
-import java.util.concurrent.Executors;
-
-import org.apache.log4j.BasicConfigurator;
-import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
-
 import com.googlecode.protobuf.netty.NettyRpcServer;
 import com.googlecode.protobuf.netty.example.Calculator.CalcService;
+import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
+
+import java.net.InetSocketAddress;
+import java.util.concurrent.Executors;
 
 public class CalculatorServer {
 
 	public static void main(String[] args) {
-		
-		BasicConfigurator.configure();
-		
+
 		NettyRpcServer server = new NettyRpcServer(
 				new NioServerSocketChannelFactory(
 						Executors.newCachedThreadPool(), 
