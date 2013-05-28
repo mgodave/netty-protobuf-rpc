@@ -21,7 +21,7 @@
  */
 package com.googlecode.protobuf.netty.exception;
 
-import com.googlecode.protobuf.netty.NettyRpcProto.RpcRequest;
+import com.googlecode.protobuf.netty.proto.NettyRpcProto.RpcRequest;
 
 @SuppressWarnings("serial")
 public class RpcException extends Exception {

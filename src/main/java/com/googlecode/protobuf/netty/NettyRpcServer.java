@@ -21,19 +21,18 @@
  */
 package com.googlecode.protobuf.netty;
 
-import java.net.SocketAddress;
-
+import com.google.protobuf.BlockingService;
+import com.google.protobuf.Service;
+import com.googlecode.protobuf.netty.proto.NettyRpcProto.RpcRequest;
 import org.apache.log4j.Logger;
 import org.jboss.netty.bootstrap.ServerBootstrap;
 import org.jboss.netty.channel.ChannelFactory;
 import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.ChannelUpstreamHandler;
-
-import com.google.protobuf.BlockingService;
-import com.google.protobuf.Service;
-import com.googlecode.protobuf.netty.NettyRpcProto.RpcRequest;
 import org.jboss.netty.channel.group.ChannelGroup;
 import org.jboss.netty.channel.group.DefaultChannelGroup;
+
+import java.net.SocketAddress;
 
 public class NettyRpcServer {
 
@@ -41,14 +40,14 @@ public class NettyRpcServer {
 	
 	private final ServerBootstrap bootstrap;
     private final ChannelGroup allChannels = new DefaultChannelGroup();
-	private final NettyRpcServerChannelUpstreamHandler handler = new NettyRpcServerChannelUpstreamHandler(allChannels);
-	private final ChannelUpstreamHandlerFactory handlerFactory = new ChannelUpstreamHandlerFactory() {
+	private final ServerHandler handler = new ServerHandler(allChannels);
+	private final ClientHandlerFactory handlerFactory = new ClientHandlerFactory() {
 		public ChannelUpstreamHandler getChannelUpstreamHandler() {
 			return handler;
 		}
 	};
 	
-	private final ChannelPipelineFactory pipelineFactory = new NettyRpcPipelineFactory(
+	private final ChannelPipelineFactory pipelineFactory = new PipelineFactory(
 			handlerFactory, 
 			RpcRequest.getDefaultInstance());
 	

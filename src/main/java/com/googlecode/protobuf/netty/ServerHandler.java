@@ -21,49 +21,31 @@
  */
 package com.googlecode.protobuf.netty;
 
+import com.google.protobuf.*;
+import com.google.protobuf.Descriptors.MethodDescriptor;
+import com.googlecode.protobuf.netty.exception.*;
+import com.googlecode.protobuf.netty.proto.NettyRpcProto;
+import com.googlecode.protobuf.netty.proto.NettyRpcProto.ErrorCode;
+import com.googlecode.protobuf.netty.proto.NettyRpcProto.RpcRequest;
+import com.googlecode.protobuf.netty.proto.NettyRpcProto.RpcResponse;
+import org.apache.log4j.Logger;
+import org.jboss.netty.channel.*;
+import org.jboss.netty.channel.group.ChannelGroup;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.log4j.Logger;
-import org.jboss.netty.channel.Channel;
-import org.jboss.netty.channel.ChannelHandlerContext;
-import org.jboss.netty.channel.ChannelPipelineCoverage;
-import org.jboss.netty.channel.ExceptionEvent;
-import org.jboss.netty.channel.MessageEvent;
-import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
-
-import com.google.protobuf.BlockingService;
-import com.google.protobuf.ByteString;
-import com.google.protobuf.InvalidProtocolBufferException;
-import com.google.protobuf.Message;
-import com.google.protobuf.RpcCallback;
-import com.google.protobuf.RpcController;
-import com.google.protobuf.Service;
-import com.google.protobuf.ServiceException;
-import com.google.protobuf.Descriptors.MethodDescriptor;
-import com.googlecode.protobuf.netty.NettyRpcProto.ErrorCode;
-import com.googlecode.protobuf.netty.NettyRpcProto.RpcRequest;
-import com.googlecode.protobuf.netty.NettyRpcProto.RpcResponse;
-import com.googlecode.protobuf.netty.exception.InvalidRpcRequestException;
-import com.googlecode.protobuf.netty.exception.NoRequestIdException;
-import com.googlecode.protobuf.netty.exception.NoSuchServiceException;
-import com.googlecode.protobuf.netty.exception.NoSuchServiceMethodException;
-import com.googlecode.protobuf.netty.exception.RpcException;
-import com.googlecode.protobuf.netty.exception.RpcServiceException;
-import org.jboss.netty.channel.ChannelStateEvent;
-import org.jboss.netty.channel.group.ChannelGroup;
-
 @ChannelPipelineCoverage("all")
-class NettyRpcServerChannelUpstreamHandler extends SimpleChannelUpstreamHandler {
+class ServerHandler extends SimpleChannelUpstreamHandler {
 
-	private static final Logger logger = Logger.getLogger(NettyRpcServerChannelUpstreamHandler.class);
+	private static final Logger logger = Logger.getLogger(ServerHandler.class);
 	
 	private final Map<String, Service> serviceMap = new ConcurrentHashMap<String, Service>();
 	private final Map<String, BlockingService> blockingServiceMap = new ConcurrentHashMap<String, BlockingService>();
 
     private final ChannelGroup allChannels;
 
-    public NettyRpcServerChannelUpstreamHandler(ChannelGroup allChannels) {
+    public ServerHandler(ChannelGroup allChannels) {
         this.allChannels = allChannels;
     }
 

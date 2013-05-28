@@ -21,160 +21,105 @@
  */
 package com.googlecode.protobuf.netty;
 
-import org.apache.log4j.Logger;
+import com.google.common.util.concurrent.AsyncFunction;
+import com.google.common.util.concurrent.FutureCallback;
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.SettableFuture;
+import com.google.protobuf.*;
+import com.google.protobuf.Descriptors.MethodDescriptor;
+import com.googlecode.protobuf.netty.proto.NettyRpcProto.RpcRequest;
+import com.googlecode.protobuf.netty.proto.NettyRpcProto.RpcResponse;
 import org.jboss.netty.channel.Channel;
 
-import com.google.protobuf.BlockingRpcChannel;
-import com.google.protobuf.InvalidProtocolBufferException;
-import com.google.protobuf.Message;
-import com.google.protobuf.RpcCallback;
-import com.google.protobuf.RpcChannel;
-import com.google.protobuf.RpcController;
-import com.google.protobuf.ServiceException;
-import com.google.protobuf.Descriptors.MethodDescriptor;
-import com.googlecode.protobuf.netty.NettyRpcProto.RpcRequest;
-import com.googlecode.protobuf.netty.NettyRpcProto.RpcResponse;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import static com.google.common.base.Throwables.propagate;
+import static com.google.common.util.concurrent.Futures.addCallback;
+import static com.google.common.util.concurrent.Futures.transform;
 
 public class NettyRpcChannel implements RpcChannel, BlockingRpcChannel {
 
-	private static final Logger logger = Logger.getLogger(NettyRpcChannel.class);
-	
-	private final Channel channel;
-	private final NettyRpcClientChannelUpstreamHandler handler;
-	
-	public NettyRpcChannel(Channel channel) {
-		this.channel = channel;
-		this.handler = channel.getPipeline().get(NettyRpcClientChannelUpstreamHandler.class);
-		if (handler == null) {
-			throw new IllegalArgumentException("Channel does not have proper handler");
-		}
-	}
-	
-	public RpcController newRpcController() {
-		return new NettyRpcController();
-	}
-	
-	public void callMethod(MethodDescriptor method, RpcController controller,
-			Message request, Message responsePrototype, RpcCallback<Message> done) {
-		int nextSeqId = (done == null) ? -1 : handler.getNextSeqId();
-		Message rpcRequest = buildRequest(done != null, nextSeqId, false, method, request);
-		if (done != null) {
-			handler.registerCallback(nextSeqId, new ResponsePrototypeRpcCallback(controller, responsePrototype, done));
-		}
-		channel.write(rpcRequest);
-	}
+  private final Channel channel;
+  private final AtomicInteger sequence = new AtomicInteger(0);
 
-	public Message callBlockingMethod(MethodDescriptor method,
-			RpcController controller, Message request, Message responsePrototype)
-			throws ServiceException {
-		logger.debug("calling blocking method: " + method.getFullName());
-		BlockingRpcCallback callback = new BlockingRpcCallback();
-		ResponsePrototypeRpcCallback rpcCallback = new ResponsePrototypeRpcCallback(controller, responsePrototype, callback);
-		int nextSeqId = handler.getNextSeqId();
-		Message rpcRequest = buildRequest(true, nextSeqId, true, method, request);
-		handler.registerCallback(nextSeqId, rpcCallback);
-		channel.write(rpcRequest);
-		synchronized(callback) {
-			while(!callback.isDone()) {
-				try {
-					callback.wait();
-				} catch (InterruptedException e) {
-					logger.warn("Interrupted while blocking", e);
-					/* Ignore */
-				}
-			}
-		}
-		if (rpcCallback.getRpcResponse() != null && rpcCallback.getRpcResponse().hasErrorCode()) {
-			// TODO: should we only throw this if the error code matches the 
-			// case where the server call threw a ServiceException?
-			throw new ServiceException(rpcCallback.getRpcResponse().getErrorMessage());
-		}
-		return callback.getMessage();
-	}
-	
-	public void close() {
-		channel.close().awaitUninterruptibly();
-	}
+  public NettyRpcChannel(Channel channel) {
+    this.channel = channel;
+  }
 
-	private Message buildRequest(boolean hasSequence, int seqId, boolean isBlocking, MethodDescriptor method, Message request) {
-		RpcRequest.Builder requestBuilder = RpcRequest.newBuilder();
-		if (hasSequence) {
-			requestBuilder.setId(seqId);
-		}
-		return requestBuilder
-			.setIsBlockingService(isBlocking)
-			.setServiceName(method.getService().getFullName())
-			.setMethodName(method.getName())
-			.setRequestMessage(request.toByteString())
-			.build();
-	}
-	
-	static class ResponsePrototypeRpcCallback implements RpcCallback<RpcResponse> {
-		
-		private final RpcController controller;
-		private final Message responsePrototype;
-		private final RpcCallback<Message> callback; 
-		
-		private RpcResponse rpcResponse;
-		
-		public ResponsePrototypeRpcCallback(RpcController controller, Message responsePrototype, RpcCallback<Message> callback) {
-			if (responsePrototype == null) {
-				throw new IllegalArgumentException("Must provide response prototype");
-			} else if (callback == null) {
-				throw new IllegalArgumentException("Must provide callback");
-			}
-			this.controller = controller;
-			this.responsePrototype = responsePrototype;
-			this.callback = callback;
-		}
-		
-		public void run(RpcResponse message) {
-			rpcResponse = message;
-			try {
-				Message response = (message == null || !message.hasResponseMessage()) ? 
-						null : 
-						responsePrototype.newBuilderForType().mergeFrom(message.getResponseMessage()).build();
-				callback.run(response);
-			} catch (InvalidProtocolBufferException e) {
-				logger.warn("Could not marshall into response", e);
-				if (controller != null) {
-					controller.setFailed("Received invalid response type from server");
-				}
-				callback.run(null);
-			}
-		}
-		
-		public RpcController getRpcController() {
-			return controller;
-		}
-		
-		public RpcResponse getRpcResponse() {
-			return rpcResponse;
-		}
-		
-	}
-	
-	private static class BlockingRpcCallback implements RpcCallback<Message> {
+  public RpcController newRpcController() {
+    return new NettyRpcController();
+  }
 
-		private boolean done = false;
-		private Message message;
-		
-		public void run(Message message) {
-			this.message = message;
-			synchronized(this) {
-				done = true;
-				notify();
-			}
-		}
-		
-		public Message getMessage() {
-			return message;
-		}
-		
-		public boolean isDone() {
-			return done;
-		}
-		
-	}
-	
+  private ListenableFuture<Message> doCallMethod(
+    MethodDescriptor method, final RpcController controller,
+    Message request, final Message responsePrototype, boolean blocking) {
+
+    ListenableFuture<RpcResponse> result = new RpcCall(buildRequest(blocking, method, request));
+    channel.write(result);
+    return transform(result, new AsyncFunction<RpcResponse, Message>() {
+      public ListenableFuture<Message> apply(RpcResponse input) {
+        SettableFuture<Message> response = SettableFuture.create();
+        try {
+          final Message.Builder builder = responsePrototype.newBuilderForType();
+          Message result = builder.mergeFrom(input.getResponseMessage()).build();
+          response.set(result);
+        } catch (InvalidProtocolBufferException e) {
+          controller.setFailed(e.getMessage());
+          response.setException(e);
+        }
+        return response;
+      }
+    });
+
+  }
+
+  public void callMethod(
+    MethodDescriptor method, final RpcController controller,
+    Message request, Message responsePrototype, final RpcCallback<Message> done) {
+
+    ListenableFuture<Message> result = doCallMethod(method, controller, request, responsePrototype, false);
+
+    addCallback(result, new FutureCallback<Message>() {
+      public void onSuccess(Message result) {
+        done.run(result);
+      }
+
+      public void onFailure(Throwable t) {
+        controller.setFailed(t.getMessage());
+        done.run(null);
+      }
+    });
+
+  }
+
+  public Message callBlockingMethod(
+    MethodDescriptor method, RpcController controller, Message request,
+    Message responsePrototype) throws ServiceException {
+
+    try {
+      return doCallMethod(method, controller, request, responsePrototype, true).get();
+    } catch (InterruptedException e) {
+      throw propagate(e);
+    } catch (ExecutionException e) {
+      throw new ServiceException(e.getMessage());
+    }
+
+  }
+
+  public void close() {
+    channel.close().awaitUninterruptibly();
+  }
+
+  private RpcRequest buildRequest(boolean isBlocking, MethodDescriptor method, Message request) {
+    RpcRequest.Builder requestBuilder = RpcRequest.newBuilder();
+    return requestBuilder
+      .setId(sequence.incrementAndGet())
+      .setIsBlockingService(isBlocking)
+      .setServiceName(method.getService().getFullName())
+      .setMethodName(method.getName())
+      .setRequestMessage(request.toByteString())
+      .build();
+  }
+
 }
