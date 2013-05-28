@@ -22,6 +22,7 @@
 package com.googlecode.protobuf.netty;
 
 import com.google.common.collect.Maps;
+import com.googlecode.protobuf.netty.exception.NoRequestIdException;
 import org.jboss.netty.channel.*;
 
 import java.util.Map;
@@ -54,6 +55,9 @@ class ClientHandler implements ChannelDownstreamHandler, ChannelUpstreamHandler 
       if (event.getMessage() instanceof RpcResponse) {
         RpcResponse response = (RpcResponse) event.getMessage();
         RpcCall call = calls.remove(response.getId());
+        if (call != null) {
+          throw new NoRequestIdException();
+        }
         call.complete(response);
       }
     } else if (e instanceof ChannelStateEvent) {
