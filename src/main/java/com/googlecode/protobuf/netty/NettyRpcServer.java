@@ -25,7 +25,6 @@ import com.google.common.base.Suppliers;
 import com.google.protobuf.BlockingService;
 import com.google.protobuf.Service;
 import com.googlecode.protobuf.netty.NettyRpcProto.RpcRequest;
-import org.apache.log4j.Logger;
 import org.jboss.netty.bootstrap.ServerBootstrap;
 import org.jboss.netty.channel.ChannelFactory;
 import org.jboss.netty.channel.ChannelHandler;
@@ -36,7 +35,6 @@ import java.net.SocketAddress;
 
 public class NettyRpcServer {
 
-  private static final Logger logger = Logger.getLogger(NettyRpcServer.class);
 
   private final ServerBootstrap bootstrap;
   private final ChannelGroup allChannels = new DefaultChannelGroup();
@@ -67,12 +65,10 @@ public class NettyRpcServer {
   }
 
   public void serve() {
-    logger.info("Serving...");
     bootstrap.bind();
   }
 
   public void serve(SocketAddress sa) {
-    logger.info("Serving on: " + sa);
     bootstrap.bind(sa);
   }
 
