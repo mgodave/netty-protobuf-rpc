@@ -19,15 +19,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.googlecode.protobuf.netty.exception;
+package com.googlecode.protobuf.netty;
 
-import com.google.protobuf.ServiceException;
-import com.googlecode.protobuf.netty.proto.NettyRpcProto.RpcRequest;
+import com.googlecode.protobuf.netty.NettyRpcProto.RpcRequest;
 
 @SuppressWarnings("serial")
-public class RpcServiceException extends RpcException {
-
-	public RpcServiceException(ServiceException serviceException, RpcRequest request, String message) {
-		super(serviceException, request, message);
+public class RpcException extends Exception {
+	
+	private final RpcRequest request;
+	
+	public RpcException(Throwable t, RpcRequest request, String message) {
+		this(request, message);
+		initCause(t);
 	}
+	
+	public RpcException(RpcRequest request, String message) {
+		super(message);
+		this.request = request;
+	}
+	
+	public RpcRequest getRpcRequest() {
+		return request;
+	}
+	
 }

@@ -172,7 +172,7 @@ public final class Calculator {
         com.google.protobuf.GeneratedMessage.Builder<Builder> {
       private com.googlecode.protobuf.netty.example.Calculator.CalcRequest result;
       
-      // Construct using com.googlecode.protobuf.netty.example.Calculator.CalcRequest.newBuilder()
+      // Construct using Calculator.CalcRequest.newBuilder()
       private Builder() {}
       
       private static Builder create() {
@@ -465,7 +465,7 @@ public final class Calculator {
         com.google.protobuf.GeneratedMessage.Builder<Builder> {
       private com.googlecode.protobuf.netty.example.Calculator.CalcResponse result;
       
-      // Construct using com.googlecode.protobuf.netty.example.Calculator.CalcResponse.newBuilder()
+      // Construct using Calculator.CalcResponse.newBuilder()
       private Builder() {}
       
       private static Builder create() {

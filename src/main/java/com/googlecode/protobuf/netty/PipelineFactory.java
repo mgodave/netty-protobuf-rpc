@@ -21,6 +21,8 @@
  */
 package com.googlecode.protobuf.netty;
 
+import com.google.common.base.Supplier;
+import org.jboss.netty.channel.ChannelHandler;
 import org.jboss.netty.channel.ChannelPipeline;
 import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.Channels;
@@ -33,10 +35,10 @@ import com.google.protobuf.Message;
 
 class PipelineFactory implements ChannelPipelineFactory {
 
-	private final HandlerFactory handlerFactory;
+	private final Supplier<ChannelHandler> handlerFactory;
 	private final Message defaultInstance;
 
-	PipelineFactory(HandlerFactory handlerFactory, Message defaultInstance) {
+	PipelineFactory(Supplier<ChannelHandler> handlerFactory, Message defaultInstance) {
 		this.handlerFactory = handlerFactory;
 		this.defaultInstance = defaultInstance;
 	}
@@ -49,7 +51,7 @@ class PipelineFactory implements ChannelPipelineFactory {
 		p.addLast("frameEncoder", new LengthFieldPrepender(4));
 		p.addLast("protobufEncoder", new ProtobufEncoder());
 
-		p.addLast("handler", handlerFactory.getChannelUpstreamHandler());
+		p.addLast("handler", handlerFactory.get());
 		return p;
 	}
 

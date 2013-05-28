@@ -23,11 +23,10 @@ package com.googlecode.protobuf.netty;
 
 import com.google.protobuf.*;
 import com.google.protobuf.Descriptors.MethodDescriptor;
-import com.googlecode.protobuf.netty.exception.*;
-import com.googlecode.protobuf.netty.proto.NettyRpcProto;
-import com.googlecode.protobuf.netty.proto.NettyRpcProto.ErrorCode;
-import com.googlecode.protobuf.netty.proto.NettyRpcProto.RpcRequest;
-import com.googlecode.protobuf.netty.proto.NettyRpcProto.RpcResponse;
+import com.googlecode.protobuf.netty.NettyRpcProto;
+import com.googlecode.protobuf.netty.NettyRpcProto.ErrorCode;
+import com.googlecode.protobuf.netty.NettyRpcProto.RpcRequest;
+import com.googlecode.protobuf.netty.NettyRpcProto.RpcResponse;
 import org.apache.log4j.Logger;
 import org.jboss.netty.channel.*;
 import org.jboss.netty.channel.group.ChannelGroup;

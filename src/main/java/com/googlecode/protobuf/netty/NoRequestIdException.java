@@ -19,15 +19,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.googlecode.protobuf.netty.exception;
-
-import com.googlecode.protobuf.netty.proto.NettyRpcProto.RpcRequest;
+package com.googlecode.protobuf.netty;
 
 @SuppressWarnings("serial")
-public class NoSuchServiceMethodException extends RpcException {
+public class NoRequestIdException extends Exception {
 
-	public NoSuchServiceMethodException(RpcRequest request, String method) {
-		super(request, "No such method: " + method);
-	}
+	public NoRequestIdException() { }
 	
 }

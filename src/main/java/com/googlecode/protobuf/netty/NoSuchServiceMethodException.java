@@ -21,10 +21,13 @@
  */
 package com.googlecode.protobuf.netty;
 
-import org.jboss.netty.channel.ChannelUpstreamHandler;
+import com.googlecode.protobuf.netty.NettyRpcProto.RpcRequest;
 
-interface HandlerFactory {
+@SuppressWarnings("serial")
+public class NoSuchServiceMethodException extends RpcException {
 
-  public ChannelUpstreamHandler getChannelUpstreamHandler();
-
+	public NoSuchServiceMethodException(RpcRequest request, String method) {
+		super(request, "No such method: " + method);
+	}
+	
 }
