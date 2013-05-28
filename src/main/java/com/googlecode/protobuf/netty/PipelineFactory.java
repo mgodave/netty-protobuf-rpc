@@ -44,18 +44,19 @@ class PipelineFactory implements ChannelPipelineFactory {
 	}
 
 	public ChannelPipeline getPipeline() throws Exception {
-		ChannelPipeline p = Channels.pipeline();
-		p.addLast("frameDecoder", new LengthFieldBasedFrameDecoder(MAX_FRAME_BYTES_LENGTH, 0, 4, 0, 4));
+
+    ChannelPipeline p = Channels.pipeline();
+
+		p.addLast("frameDecoder", new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 4, 0, 4));
 		p.addLast("protobufDecoder", new ProtobufDecoder(defaultInstance));
 
 		p.addLast("frameEncoder", new LengthFieldPrepender(4));
 		p.addLast("protobufEncoder", new ProtobufEncoder());
 
 		p.addLast("handler", handlerFactory.get());
-		return p;
+
+    return p;
+
 	}
 
-    // Since Netty 3.2.7.Final, it's safe to use Integer.MAX_VALUE
-    // For more information see: http://stackoverflow.com/questions/8065022/how-to-use-unlimited-frame-sizes-in-jboss-netty-without-wasting-memory
-	private static final int MAX_FRAME_BYTES_LENGTH = Integer.MAX_VALUE;
 }
