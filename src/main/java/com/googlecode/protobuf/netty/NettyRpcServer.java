@@ -27,7 +27,6 @@ import com.googlecode.protobuf.netty.proto.NettyRpcProto.RpcRequest;
 import org.apache.log4j.Logger;
 import org.jboss.netty.bootstrap.ServerBootstrap;
 import org.jboss.netty.channel.ChannelFactory;
-import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.ChannelUpstreamHandler;
 import org.jboss.netty.channel.group.ChannelGroup;
 import org.jboss.netty.channel.group.DefaultChannelGroup;
@@ -36,54 +35,52 @@ import java.net.SocketAddress;
 
 public class NettyRpcServer {
 
-	private static final Logger logger = Logger.getLogger(NettyRpcServer.class);
-	
-	private final ServerBootstrap bootstrap;
-    private final ChannelGroup allChannels = new DefaultChannelGroup();
-	private final ServerHandler handler = new ServerHandler(allChannels);
-	private final ClientHandlerFactory handlerFactory = new ClientHandlerFactory() {
-		public ChannelUpstreamHandler getChannelUpstreamHandler() {
-			return handler;
-		}
-	};
-	
-	private final ChannelPipelineFactory pipelineFactory = new PipelineFactory(
-			handlerFactory, 
-			RpcRequest.getDefaultInstance());
-	
-	public NettyRpcServer(ChannelFactory channelFactory) {
-		bootstrap = new ServerBootstrap(channelFactory);
-		bootstrap.setPipelineFactory(pipelineFactory);
-	}
-	
-	public void registerService(Service service) {
-		handler.registerService(service);
-	}
-	
-	public void unregisterService(Service service) {
-		handler.unregisterService(service);
-	}
-	
-	public void registerBlockingService(BlockingService service) {
-		handler.registerBlockingService(service);
-	}
-	
-	public void unregisterBlockingService(BlockingService service) {
-		handler.unregisterBlockingService(service);
-	}
-	
-	public void serve() {
-		logger.info("Serving...");
-		bootstrap.bind();
-	}
-	
-	public void serve(SocketAddress sa) {
-		logger.info("Serving on: " + sa);
-		bootstrap.bind(sa);
-	}
+  private static final Logger logger = Logger.getLogger(NettyRpcServer.class);
 
-    public void shutdown() {
-        allChannels.close().awaitUninterruptibly();
-        bootstrap.releaseExternalResources();
-    }
+  private final ServerBootstrap bootstrap;
+  private final ChannelGroup allChannels = new DefaultChannelGroup();
+  private final ServerHandler handler = new ServerHandler(allChannels);
+
+  public NettyRpcServer(ChannelFactory channelFactory) {
+    bootstrap = new ServerBootstrap(channelFactory);
+    bootstrap.setPipelineFactory(
+      new PipelineFactory(
+        new HandlerFactory() {
+          public ChannelUpstreamHandler getChannelUpstreamHandler() {
+            return handler;
+          }
+        },
+        RpcRequest.getDefaultInstance()));
+  }
+
+  public void registerService(Service service) {
+    handler.registerService(service);
+  }
+
+  public void unregisterService(Service service) {
+    handler.unregisterService(service);
+  }
+
+  public void registerBlockingService(BlockingService service) {
+    handler.registerBlockingService(service);
+  }
+
+  public void unregisterBlockingService(BlockingService service) {
+    handler.unregisterBlockingService(service);
+  }
+
+  public void serve() {
+    logger.info("Serving...");
+    bootstrap.bind();
+  }
+
+  public void serve(SocketAddress sa) {
+    logger.info("Serving on: " + sa);
+    bootstrap.bind(sa);
+  }
+
+  public void shutdown() {
+    allChannels.close().awaitUninterruptibly();
+    bootstrap.releaseExternalResources();
+  }
 }

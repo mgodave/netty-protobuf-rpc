@@ -24,7 +24,6 @@ package com.googlecode.protobuf.netty;
 import com.googlecode.protobuf.netty.proto.NettyRpcProto;
 import org.jboss.netty.bootstrap.ClientBootstrap;
 import org.jboss.netty.channel.ChannelFactory;
-import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.ChannelUpstreamHandler;
 
 import java.net.SocketAddress;
@@ -33,19 +32,16 @@ public class NettyRpcClient {
 
   private final ClientBootstrap bootstrap;
 
-  private final ClientHandlerFactory handlerFactory = new ClientHandlerFactory() {
-    public ChannelUpstreamHandler getChannelUpstreamHandler() {
-      return new ClientHandler();
-    }
-  };
-
-  private final ChannelPipelineFactory pipelineFactory = new PipelineFactory(
-    handlerFactory,
-    NettyRpcProto.RpcResponse.getDefaultInstance());
-
   public NettyRpcClient(ChannelFactory channelFactory) {
     bootstrap = new ClientBootstrap(channelFactory);
-    bootstrap.setPipelineFactory(pipelineFactory);
+    bootstrap.setPipelineFactory(
+      new PipelineFactory(
+        new HandlerFactory() {
+          public ChannelUpstreamHandler getChannelUpstreamHandler() {
+            return new ClientHandler();
+          }
+        },
+        NettyRpcProto.RpcResponse.getDefaultInstance()));
   }
 
   public NettyRpcChannel blockingConnect(SocketAddress sa) {

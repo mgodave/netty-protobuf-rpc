@@ -33,10 +33,10 @@ import com.google.protobuf.Message;
 
 class PipelineFactory implements ChannelPipelineFactory {
 
-	private final ClientHandlerFactory handlerFactory;
+	private final HandlerFactory handlerFactory;
 	private final Message defaultInstance;
 
-	PipelineFactory(ClientHandlerFactory handlerFactory, Message defaultInstance) {
+	PipelineFactory(HandlerFactory handlerFactory, Message defaultInstance) {
 		this.handlerFactory = handlerFactory;
 		this.defaultInstance = defaultInstance;
 	}
