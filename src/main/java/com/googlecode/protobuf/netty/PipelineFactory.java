@@ -31,12 +31,12 @@ import org.jboss.netty.handler.codec.protobuf.ProtobufEncoder;
 
 import com.google.protobuf.Message;
 
-class NettyRpcPipelineFactory implements ChannelPipelineFactory {
+class PipelineFactory implements ChannelPipelineFactory {
 
-	private final ChannelUpstreamHandlerFactory handlerFactory;
+	private final ClientHandlerFactory handlerFactory;
 	private final Message defaultInstance;
 
-	NettyRpcPipelineFactory(ChannelUpstreamHandlerFactory handlerFactory, Message defaultInstance) {
+	PipelineFactory(ClientHandlerFactory handlerFactory, Message defaultInstance) {
 		this.handlerFactory = handlerFactory;
 		this.defaultInstance = defaultInstance;
 	}
