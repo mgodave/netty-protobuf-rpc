@@ -61,8 +61,7 @@ class ClientHandler implements ChannelDownstreamHandler, ChannelUpstreamHandler 
       }
     } else if (e instanceof ChannelStateEvent) {
       ChannelStateEvent event = (ChannelStateEvent) e;
-      if (event.getState().equals(ChannelState.OPEN) &&
-        ((Boolean) event.getValue()) == false) {
+      if (event.getState().equals(ChannelState.OPEN) && !((Boolean) event.getValue())) {
         synchronized (calls) {
           for (RpcCall call : calls.values()) {
             call.cancel(true);
