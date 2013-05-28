@@ -21,10 +21,11 @@
  */
 package com.googlecode.protobuf.netty;
 
-import com.googlecode.protobuf.netty.proto.NettyRpcProto;
+import com.google.common.base.Supplier;
+import com.googlecode.protobuf.netty.NettyRpcProto;
 import org.jboss.netty.bootstrap.ClientBootstrap;
 import org.jboss.netty.channel.ChannelFactory;
-import org.jboss.netty.channel.ChannelUpstreamHandler;
+import org.jboss.netty.channel.ChannelHandler;
 
 import java.net.SocketAddress;
 
@@ -36,8 +37,8 @@ public class NettyRpcClient {
     bootstrap = new ClientBootstrap(channelFactory);
     bootstrap.setPipelineFactory(
       new PipelineFactory(
-        new HandlerFactory() {
-          public ChannelUpstreamHandler getChannelUpstreamHandler() {
+        new Supplier<ChannelHandler>() {
+          public ChannelHandler get() {
             return new ClientHandler();
           }
         },

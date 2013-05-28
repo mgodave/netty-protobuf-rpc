@@ -21,13 +21,14 @@
  */
 package com.googlecode.protobuf.netty;
 
+import com.google.common.base.Suppliers;
 import com.google.protobuf.BlockingService;
 import com.google.protobuf.Service;
-import com.googlecode.protobuf.netty.proto.NettyRpcProto.RpcRequest;
+import com.googlecode.protobuf.netty.NettyRpcProto.RpcRequest;
 import org.apache.log4j.Logger;
 import org.jboss.netty.bootstrap.ServerBootstrap;
 import org.jboss.netty.channel.ChannelFactory;
-import org.jboss.netty.channel.ChannelUpstreamHandler;
+import org.jboss.netty.channel.ChannelHandler;
 import org.jboss.netty.channel.group.ChannelGroup;
 import org.jboss.netty.channel.group.DefaultChannelGroup;
 
@@ -45,11 +46,7 @@ public class NettyRpcServer {
     bootstrap = new ServerBootstrap(channelFactory);
     bootstrap.setPipelineFactory(
       new PipelineFactory(
-        new HandlerFactory() {
-          public ChannelUpstreamHandler getChannelUpstreamHandler() {
-            return handler;
-          }
-        },
+        Suppliers.<ChannelHandler>ofInstance(handler),
         RpcRequest.getDefaultInstance()));
   }
 

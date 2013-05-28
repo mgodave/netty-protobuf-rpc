@@ -19,19 +19,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.googlecode.protobuf.netty.exception;
+package com.googlecode.protobuf.netty;
 
-import com.googlecode.protobuf.netty.proto.NettyRpcProto.RpcRequest;
+import com.googlecode.protobuf.netty.NettyRpcProto.RpcRequest;
 
 @SuppressWarnings("serial")
-public class InvalidRpcRequestException extends RpcException {
+public class NoSuchServiceException extends RpcException {
 
-	public InvalidRpcRequestException(Throwable t, RpcRequest request, String message) {
-		super(t, request, message);
-	}
-	
-	public InvalidRpcRequestException(RpcRequest request, String message) {
-		super(request, message);
+	public NoSuchServiceException(RpcRequest request, String serviceName) {
+		super(request, "No such service name: " + serviceName);
 	}
 	
 }

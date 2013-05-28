@@ -19,11 +19,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.googlecode.protobuf.netty.exception;
+package com.googlecode.protobuf.netty;
+
+import com.googlecode.protobuf.netty.NettyRpcProto.RpcRequest;
 
 @SuppressWarnings("serial")
-public class NoRequestIdException extends Exception {
+public class InvalidRpcRequestException extends RpcException {
 
-	public NoRequestIdException() { }
+	public InvalidRpcRequestException(Throwable t, RpcRequest request, String message) {
+		super(t, request, message);
+	}
+	
+	public InvalidRpcRequestException(RpcRequest request, String message) {
+		super(request, message);
+	}
 	
 }

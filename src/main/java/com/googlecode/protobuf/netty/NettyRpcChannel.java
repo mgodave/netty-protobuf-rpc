@@ -27,8 +27,8 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
 import com.google.protobuf.*;
 import com.google.protobuf.Descriptors.MethodDescriptor;
-import com.googlecode.protobuf.netty.proto.NettyRpcProto.RpcRequest;
-import com.googlecode.protobuf.netty.proto.NettyRpcProto.RpcResponse;
+import com.googlecode.protobuf.netty.NettyRpcProto.RpcRequest;
+import com.googlecode.protobuf.netty.NettyRpcProto.RpcResponse;
 import org.jboss.netty.channel.Channel;
 
 import java.util.concurrent.ExecutionException;

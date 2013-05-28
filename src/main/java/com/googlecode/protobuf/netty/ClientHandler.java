@@ -22,12 +22,11 @@
 package com.googlecode.protobuf.netty;
 
 import com.google.common.collect.Maps;
-import com.googlecode.protobuf.netty.exception.NoRequestIdException;
 import org.jboss.netty.channel.*;
 
 import java.util.Map;
 
-import static com.googlecode.protobuf.netty.proto.NettyRpcProto.RpcResponse;
+import static com.googlecode.protobuf.netty.NettyRpcProto.RpcResponse;
 
 class ClientHandler implements ChannelDownstreamHandler, ChannelUpstreamHandler {
 
