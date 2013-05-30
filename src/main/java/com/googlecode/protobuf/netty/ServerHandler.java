@@ -63,7 +63,7 @@ class ServerHandler extends SimpleChannelUpstreamHandler {
 		String serviceName = request.getServiceName();
 		String methodName = request.getMethodName();
 		
-		logger.info("Received request for serviceName: " + serviceName + ", method: " + methodName);
+		logger.debug("Received request for serviceName: " + serviceName + ", method: " + methodName);
 		
 		if (request.getIsBlockingService()) {
 			BlockingService blockingService = blockingServiceMap.get(serviceName);

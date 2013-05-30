@@ -51,6 +51,10 @@ public class NettyRpcChannel implements RpcChannel, BlockingRpcChannel {
     return new NettyRpcController();
   }
 
+  public boolean isOpen() {
+    return channel.isOpen();
+  }
+
   private ListenableFuture<Message> doCallMethod(
     MethodDescriptor method, final RpcController controller,
     Message request, final Message responsePrototype, boolean blocking) {
