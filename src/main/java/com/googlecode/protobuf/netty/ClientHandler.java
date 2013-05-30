@@ -70,6 +70,14 @@ class ClientHandler implements ChannelDownstreamHandler, ChannelUpstreamHandler 
         }
       }
       ctx.sendUpstream(e);
+    } else if (e instanceof ExceptionEvent) {
+      ExceptionEvent event = (ExceptionEvent) e;
+      synchronized (calls) {
+        for (RpcCall call : calls.values()) {
+          call.fail(event.getCause());
+        }
+        calls.clear();
+      }
     } else {
       ctx.sendUpstream(e);
     }
