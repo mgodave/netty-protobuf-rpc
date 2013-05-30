@@ -15,7 +15,14 @@ class RpcCall extends AbstractFuture<NettyRpcProto.RpcResponse> {
   }
 
   public void complete(NettyRpcProto.RpcResponse response) {
+    if (response.hasErrorCode()) {
+      setException(new RpcException(getRequest(), response.getErrorMessage()));
+    }
     set(response);
+  }
+
+  public void fail(Throwable e) {
+    setException(e);
   }
 
 }
