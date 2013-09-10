@@ -21,7 +21,7 @@
  */
 package com.googlecode.protobuf.netty.example;
 
-import com.googlecode.protobuf.netty.NettyRpcServer;
+import com.googlecode.protobuf.netty.server.RpcServer;
 import com.googlecode.protobuf.netty.example.Calculator.CalcService;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 
@@ -32,7 +32,7 @@ public class CalculatorServer {
 
 	public static void main(String[] args) {
 
-		NettyRpcServer server = new NettyRpcServer(
+		RpcServer server = new RpcServer(
 				new NioServerSocketChannelFactory(
 						Executors.newCachedThreadPool(), 
 						Executors.newCachedThreadPool()));

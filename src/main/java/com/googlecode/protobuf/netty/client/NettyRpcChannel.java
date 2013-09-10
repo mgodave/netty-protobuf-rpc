@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.googlecode.protobuf.netty;
+package com.googlecode.protobuf.netty.client;
 
 import com.google.common.util.concurrent.AsyncFunction;
 import com.google.common.util.concurrent.FutureCallback;
@@ -27,9 +27,10 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
 import com.google.protobuf.*;
 import com.google.protobuf.Descriptors.MethodDescriptor;
+import com.googlecode.protobuf.netty.NettyRpcController;
 import com.googlecode.protobuf.netty.NettyRpcProto.RpcRequest;
 import com.googlecode.protobuf.netty.NettyRpcProto.RpcResponse;
-import org.jboss.netty.channel.Channel;
+import io.netty.channel.Channel;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;

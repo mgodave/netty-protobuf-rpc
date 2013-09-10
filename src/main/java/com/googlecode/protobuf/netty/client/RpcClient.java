@@ -19,40 +19,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.googlecode.protobuf.netty;
+package com.googlecode.protobuf.netty.client;
 
-import com.google.common.base.Supplier;
-import org.jboss.netty.bootstrap.ClientBootstrap;
-import org.jboss.netty.channel.ChannelFactory;
-import org.jboss.netty.channel.ChannelHandler;
+import io.netty.bootstrap.Bootstrap;
+import io.netty.channel.Channel;
+import io.netty.channel.nio.NioEventLoop;
+import io.netty.channel.socket.nio.NioSocketChannel;
 
 import javax.inject.Inject;
 import java.net.SocketAddress;
 
-public class NettyRpcClient {
+public class RpcClient {
 
-  private final ClientBootstrap bootstrap;
+  private final Bootstrap bootstrap = new Bootstrap();
 
   @Inject
-  public NettyRpcClient(ChannelFactory channelFactory) {
-    bootstrap = new ClientBootstrap(channelFactory);
-    bootstrap.setPipelineFactory(
-      new PipelineFactory(
-        new Supplier<ChannelHandler>() {
-          public ChannelHandler get() {
-            return new ClientHandler();
-          }
-        },
-        NettyRpcProto.RpcResponse.getDefaultInstance()));
+  public RpcClient(NioEventLoop eventLoopGroup) {
+    bootstrap.group(eventLoopGroup);
+    bootstrap.channel(NioSocketChannel.class);
+    bootstrap.handler(new Initializer());
   }
 
   public NettyRpcChannel blockingConnect(SocketAddress sa) {
-    return new NettyRpcChannel(
-      bootstrap.connect(sa).awaitUninterruptibly().getChannel());
-  }
-
-  public void shutdown() {
-    bootstrap.releaseExternalResources();
+    Channel channel = bootstrap.connect(sa).awaitUninterruptibly().channel();
+    return new NettyRpcChannel(channel);
   }
 
 }

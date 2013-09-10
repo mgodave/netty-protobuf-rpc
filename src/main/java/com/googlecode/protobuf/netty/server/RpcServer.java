@@ -19,35 +19,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.googlecode.protobuf.netty;
+package com.googlecode.protobuf.netty.server;
 
-import com.google.common.base.Suppliers;
 import com.google.protobuf.BlockingService;
 import com.google.protobuf.Service;
-import com.googlecode.protobuf.netty.NettyRpcProto.RpcRequest;
-import org.jboss.netty.bootstrap.ServerBootstrap;
-import org.jboss.netty.channel.ChannelFactory;
-import org.jboss.netty.channel.ChannelHandler;
-import org.jboss.netty.channel.group.ChannelGroup;
-import org.jboss.netty.channel.group.DefaultChannelGroup;
+import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.group.ChannelGroup;
+import io.netty.channel.group.DefaultChannelGroup;
+import io.netty.channel.nio.NioEventLoop;
 
 import javax.inject.Inject;
 import java.net.SocketAddress;
 
-public class NettyRpcServer {
+public class RpcServer {
 
 
   private final ServerBootstrap bootstrap;
-  private final ChannelGroup allChannels = new DefaultChannelGroup();
-  private final ServerHandler handler = new ServerHandler(allChannels);
+  private final ChannelGroup allChannels;
+  private final ServerHandler handler;
 
   @Inject
-  public NettyRpcServer(ChannelFactory channelFactory) {
-    bootstrap = new ServerBootstrap(channelFactory);
-    bootstrap.setPipelineFactory(
-      new PipelineFactory(
-        Suppliers.<ChannelHandler>ofInstance(handler),
-        RpcRequest.getDefaultInstance()));
+  public RpcServer(NioEventLoop eventLoopGroup) {
+    this.allChannels = new DefaultChannelGroup(eventLoopGroup);
+    this.handler = new ServerHandler(allChannels);
+    this.bootstrap = new ServerBootstrap();
+    bootstrap.handler(new Initializer(handler));
+    bootstrap.group(eventLoopGroup);
   }
 
   public void registerService(Service service) {
@@ -76,6 +73,5 @@ public class NettyRpcServer {
 
   public void shutdown() {
     allChannels.close().awaitUninterruptibly();
-    bootstrap.releaseExternalResources();
   }
 }
