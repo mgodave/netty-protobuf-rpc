@@ -9,7 +9,7 @@ import io.netty.handler.codec.LengthFieldPrepender;
 import io.netty.handler.codec.protobuf.ProtobufDecoder;
 import io.netty.handler.codec.protobuf.ProtobufEncoder;
 
-class Initializer extends ChannelInitializer<ServerSocketChannel> {
+class Initializer<T extends ServerSocketChannel> extends ChannelInitializer<T> {
 
   private final ServerHandler handler;
 
