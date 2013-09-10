@@ -1,6 +1,8 @@
-package com.googlecode.protobuf.netty;
+package com.googlecode.protobuf.netty.client;
 
 import com.google.common.util.concurrent.AbstractFuture;
+import com.googlecode.protobuf.netty.NettyRpcProto;
+import com.googlecode.protobuf.netty.RpcException;
 
 class RpcCall extends AbstractFuture<NettyRpcProto.RpcResponse> {
 
