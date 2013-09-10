@@ -28,10 +28,15 @@ import com.google.protobuf.Service;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
+import io.netty.channel.EventLoopGroup;
 import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.ChannelGroupFuture;
 import io.netty.channel.group.DefaultChannelGroup;
-import io.netty.channel.nio.NioEventLoop;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.oio.OioEventLoopGroup;
+import io.netty.channel.socket.ServerSocketChannel;
+import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.channel.socket.oio.OioServerSocketChannel;
 
 import javax.inject.Inject;
 import java.net.SocketAddress;
@@ -44,13 +49,22 @@ public class RpcServer extends AbstractService {
   private final SocketAddress address;
 
   @Inject
-  public RpcServer(NioEventLoop eventLoopGroup, SocketAddress address) {
+  <T extends ServerSocketChannel> RpcServer(EventLoopGroup eventLoopGroup, Class<T> channel, SocketAddress address) {
     this.address = address;
-    this.allChannels = new DefaultChannelGroup(eventLoopGroup);
+    this.allChannels = new DefaultChannelGroup(eventLoopGroup.next());
     this.handler = new ServerHandler(allChannels);
     this.bootstrap = new ServerBootstrap();
+    bootstrap.channel(channel);
     bootstrap.handler(new Initializer(handler));
     bootstrap.group(eventLoopGroup);
+  }
+
+  public RpcServer(NioEventLoopGroup eventLoopGroup, SocketAddress address) {
+    this(eventLoopGroup, NioServerSocketChannel.class ,address);
+  }
+
+  public RpcServer(OioEventLoopGroup eventLoopGroup, SocketAddress address) {
+    this(eventLoopGroup, OioServerSocketChannel.class, address);
   }
 
   @Override
