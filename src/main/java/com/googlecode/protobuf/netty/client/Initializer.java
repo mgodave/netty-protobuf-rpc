@@ -34,10 +34,10 @@ import io.netty.handler.codec.protobuf.ProtobufEncoder;
 import java.util.concurrent.ConcurrentHashMap;
 
 
-class Initializer extends ChannelInitializer<SocketChannel> {
+class Initializer<T extends SocketChannel> extends ChannelInitializer<T> {
 
   @Override
-  protected void initChannel(SocketChannel ch) throws Exception {
+  protected void initChannel(T ch) throws Exception {
     ChannelPipeline p = ch.pipeline();
 
     p.addLast("frameDecoder", new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 4, 0, 4));

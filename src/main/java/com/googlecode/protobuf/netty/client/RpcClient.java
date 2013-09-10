@@ -21,6 +21,7 @@
  */
 package com.googlecode.protobuf.netty.client;
 
+import com.google.common.reflect.TypeToken;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.nio.NioEventLoop;
@@ -28,9 +29,11 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 
 import javax.inject.Inject;
 import java.net.SocketAddress;
+import java.nio.channels.SocketChannel;
 
-public class RpcClient {
+public class RpcClient<T extends SocketChannel> {
 
+  private final TypeToken<T> type = new TypeToken<T>() {};
   private final Bootstrap bootstrap = new Bootstrap();
 
   @Inject

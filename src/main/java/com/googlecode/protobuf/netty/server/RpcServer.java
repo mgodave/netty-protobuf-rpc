@@ -21,30 +21,76 @@
  */
 package com.googlecode.protobuf.netty.server;
 
+import com.google.common.base.Throwables;
+import com.google.common.util.concurrent.AbstractService;
 import com.google.protobuf.BlockingService;
 import com.google.protobuf.Service;
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.group.ChannelGroup;
+import io.netty.channel.group.ChannelGroupFuture;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.channel.nio.NioEventLoop;
 
 import javax.inject.Inject;
 import java.net.SocketAddress;
 
-public class RpcServer {
-
+public class RpcServer extends AbstractService {
 
   private final ServerBootstrap bootstrap;
   private final ChannelGroup allChannels;
   private final ServerHandler handler;
+  private final SocketAddress address;
 
   @Inject
-  public RpcServer(NioEventLoop eventLoopGroup) {
+  public RpcServer(NioEventLoop eventLoopGroup, SocketAddress address) {
+    this.address = address;
     this.allChannels = new DefaultChannelGroup(eventLoopGroup);
     this.handler = new ServerHandler(allChannels);
     this.bootstrap = new ServerBootstrap();
     bootstrap.handler(new Initializer(handler));
     bootstrap.group(eventLoopGroup);
+  }
+
+  @Override
+  protected void doStart() {
+    try {
+      ChannelFuture f = bootstrap.bind(address);
+      f.addListener(new ChannelFutureListener() {
+        @Override
+        public void operationComplete(ChannelFuture future) throws Exception {
+          if (future.isSuccess()) {
+            notifyStarted();
+          } else {
+            notifyFailed(future.cause());
+          }
+        }
+      });
+    } catch (Throwable t) {
+      notifyFailed(t);
+      Throwables.propagate(t);
+    }
+  }
+
+  @Override
+  protected void doStop() {
+    try {
+      ChannelGroupFuture f = allChannels.close();
+      f.addListener(new ChannelFutureListener() {
+        @Override
+        public void operationComplete(ChannelFuture future) throws Exception {
+          if (future.isSuccess()) {
+            notifyStopped();
+          } else {
+            notifyFailed(future.cause());
+          }
+        }
+      });
+    } catch (Throwable t) {
+      notifyFailed(t);
+      Throwables.propagate(t);
+    }
   }
 
   public void registerService(Service service) {
@@ -63,15 +109,4 @@ public class RpcServer {
     handler.unregisterBlockingService(service);
   }
 
-  public void serve() {
-    bootstrap.bind();
-  }
-
-  public void serve(SocketAddress sa) {
-    bootstrap.bind(sa);
-  }
-
-  public void shutdown() {
-    allChannels.close().awaitUninterruptibly();
-  }
 }
