@@ -21,26 +21,35 @@
  */
 package com.googlecode.protobuf.netty.client;
 
-import com.google.common.reflect.TypeToken;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
+import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoop;
+import io.netty.channel.oio.OioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.channel.socket.oio.OioSocketChannel;
 
 import javax.inject.Inject;
 import java.net.SocketAddress;
-import java.nio.channels.SocketChannel;
 
-public class RpcClient<T extends SocketChannel> {
+public class RpcClient {
 
-  private final TypeToken<T> type = new TypeToken<T>() {};
   private final Bootstrap bootstrap = new Bootstrap();
+
+  <T extends SocketChannel> RpcClient(EventLoopGroup eventLoopGroup, Class<T> channel) {
+    bootstrap.group(eventLoopGroup);
+    bootstrap.channel(channel);
+    bootstrap.handler(new Initializer<T>());
+  }
 
   @Inject
   public RpcClient(NioEventLoop eventLoopGroup) {
-    bootstrap.group(eventLoopGroup);
-    bootstrap.channel(NioSocketChannel.class);
-    bootstrap.handler(new Initializer());
+    this(eventLoopGroup, NioSocketChannel.class);
+  }
+
+  public RpcClient(OioEventLoopGroup eventLoopGroup) {
+    this(eventLoopGroup, OioSocketChannel.class);
   }
 
   public NettyRpcChannel blockingConnect(SocketAddress sa) {
