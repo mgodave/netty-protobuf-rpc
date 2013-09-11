@@ -38,6 +38,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest;
 import static com.googlecode.protobuf.netty.NettyRpcProto.RpcContainer;
 
 class ServerHandler extends ChannelInboundHandlerAdapter {
@@ -66,7 +67,13 @@ class ServerHandler extends ChannelInboundHandlerAdapter {
     RpcContainer container = (RpcContainer) msg;
 
     if (container.hasCancel()) {
-      // do cancel
+      RpcCancelRequest cancel = container.getCancel();
+      ServerController controller = controllers.get(cancel.getId());
+      if (controller == null) {
+        return;
+      }
+      controller.notifyCanceled();
+      return;
     }
 
     final RpcRequest request = container.getRequest();
@@ -135,7 +142,8 @@ class ServerHandler extends ChannelInboundHandlerAdapter {
           throw new InvalidRpcRequestException(ex, request, "Could not build method request message");
         }
         final Channel channel = ctx.channel();
-        final RpcController controller = new ServerController();
+        final ServerController controller = new ServerController();
+        controllers.put(request.getId(), controller);
         RpcCallback<Message> callback = !request.hasId() ? null : new RpcCallback<Message>() {
           public void run(Message methodResponse) {
             if (methodResponse != null) {
@@ -153,6 +161,7 @@ class ServerHandler extends ChannelInboundHandlerAdapter {
               }
               channel.writeAndFlush(builder.build());
             }
+            controllers.remove(request.getId());
           }
         };
         try {
