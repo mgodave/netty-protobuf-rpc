@@ -22,7 +22,7 @@
 package com.googlecode.protobuf.netty.client;
 
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoop;
 import io.netty.channel.oio.OioEventLoopGroup;
@@ -52,9 +52,9 @@ public class RpcClient {
     this(eventLoopGroup, OioSocketChannel.class);
   }
 
-  public NettyRpcChannel blockingConnect(SocketAddress sa) {
-    Channel channel = bootstrap.connect(sa).awaitUninterruptibly().channel();
-    return new NettyRpcChannel(channel);
+  public RpcChannel connect(SocketAddress sa) throws InterruptedException {
+    ChannelFuture f = bootstrap.connect(sa).await();
+    return new RpcChannel(f.channel());
   }
 
 }

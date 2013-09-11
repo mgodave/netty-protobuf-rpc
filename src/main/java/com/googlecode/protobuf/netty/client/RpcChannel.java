@@ -27,7 +27,6 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
 import com.google.protobuf.*;
 import com.google.protobuf.Descriptors.MethodDescriptor;
-import com.googlecode.protobuf.netty.NettyRpcController;
 import com.googlecode.protobuf.netty.NettyRpcProto.RpcRequest;
 import com.googlecode.protobuf.netty.NettyRpcProto.RpcResponse;
 import io.netty.channel.Channel;
@@ -39,17 +38,13 @@ import static com.google.common.base.Throwables.propagate;
 import static com.google.common.util.concurrent.Futures.addCallback;
 import static com.google.common.util.concurrent.Futures.transform;
 
-public class NettyRpcChannel implements RpcChannel, BlockingRpcChannel {
+public class RpcChannel implements com.google.protobuf.RpcChannel, BlockingRpcChannel {
 
   private final Channel channel;
   private final AtomicInteger sequence = new AtomicInteger(0);
 
-  public NettyRpcChannel(Channel channel) {
+  RpcChannel(Channel channel) {
     this.channel = channel;
-  }
-
-  public RpcController newRpcController() {
-    return new NettyRpcController();
   }
 
   public boolean isOpen() {
@@ -125,6 +120,10 @@ public class NettyRpcChannel implements RpcChannel, BlockingRpcChannel {
       .setMethodName(method.getName())
       .setRequestMessage(request.toByteString())
       .build();
+  }
+
+  void requestCancel() {
+
   }
 
 }
