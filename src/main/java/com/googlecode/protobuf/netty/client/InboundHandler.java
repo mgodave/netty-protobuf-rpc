@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static com.googlecode.protobuf.netty.NettyRpcProto.RpcContainer;
 import static com.googlecode.protobuf.netty.NettyRpcProto.RpcResponse;
 
 class InboundHandler extends ChannelInboundHandlerAdapter {
@@ -21,9 +22,11 @@ class InboundHandler extends ChannelInboundHandlerAdapter {
   @Override
   public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 
-    checkArgument(msg instanceof RpcResponse);
+    checkArgument(msg instanceof RpcContainer);
+    RpcContainer container = (RpcContainer) msg;
+    checkArgument(container.hasResponse());
 
-    RpcResponse response = (RpcResponse) msg;
+    RpcResponse response = container.getResponse();
     RpcCall call = callMap.remove(response.getId());
     if (call == null) {
       throw new NoRequestIdException();

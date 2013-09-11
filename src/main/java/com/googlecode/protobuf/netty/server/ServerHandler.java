@@ -21,6 +21,7 @@
  */
 package com.googlecode.protobuf.netty.server;
 
+import com.google.common.base.Preconditions;
 import com.google.protobuf.*;
 import com.google.protobuf.Descriptors.MethodDescriptor;
 import com.googlecode.protobuf.netty.*;
@@ -36,6 +37,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static com.googlecode.protobuf.netty.NettyRpcProto.RpcContainer;
 
 class ServerHandler extends ChannelInboundHandlerAdapter {
 
@@ -58,7 +61,15 @@ class ServerHandler extends ChannelInboundHandlerAdapter {
 
   @Override
   public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-    final RpcRequest request = (RpcRequest) msg;
+
+    Preconditions.checkArgument(msg instanceof RpcContainer);
+    RpcContainer container = (RpcContainer) msg;
+
+    if (container.hasCancel()) {
+      // do cancel
+    }
+
+    final RpcRequest request = container.getRequest();
 
     String serviceName = request.getServiceName();
     String methodName = request.getMethodName();
