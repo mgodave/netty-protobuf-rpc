@@ -59,6 +59,7 @@ public class RpcServer extends AbstractService {
     bootstrap.group(eventLoopGroup);
   }
 
+  @Inject
   public RpcServer(NioEventLoopGroup eventLoopGroup, SocketAddress address) {
     this(eventLoopGroup, NioServerSocketChannel.class ,address);
   }

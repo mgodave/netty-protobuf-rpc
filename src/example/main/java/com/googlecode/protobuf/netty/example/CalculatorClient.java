@@ -24,7 +24,7 @@ package com.googlecode.protobuf.netty.example;
 import com.google.protobuf.RpcCallback;
 import com.google.protobuf.RpcController;
 import com.google.protobuf.ServiceException;
-import com.googlecode.protobuf.netty.client.NettyRpcChannel;
+import com.googlecode.protobuf.netty.client.RpcChannel;
 import com.googlecode.protobuf.netty.client.RpcClient;
 import com.googlecode.protobuf.netty.example.Calculator.CalcRequest;
 import com.googlecode.protobuf.netty.example.Calculator.CalcResponse;
@@ -45,7 +45,7 @@ public class CalculatorClient {
 						Executors.newCachedThreadPool(), 
 						Executors.newCachedThreadPool()));
 		
-		NettyRpcChannel channel = client.blockingConnect(new InetSocketAddress("localhost", 8080));
+		RpcChannel channel = client.connect(new InetSocketAddress("localhost", 8080));
 		
 		Stub calcService = CalcService.newStub(channel);
 		

@@ -41,6 +41,7 @@ class ServerHandler extends ChannelInboundHandlerAdapter {
 
   private final Logger logger = LoggerFactory.getLogger(getClass());
 
+  private final Map<Integer, ServerController> controllers = new ConcurrentHashMap<Integer, ServerController>();
   private final Map<String, Service> serviceMap = new ConcurrentHashMap<String, Service>();
   private final Map<String, BlockingService> blockingServiceMap = new ConcurrentHashMap<String, BlockingService>();
 
@@ -84,7 +85,8 @@ class ServerHandler extends ChannelInboundHandlerAdapter {
         } catch (InvalidProtocolBufferException ex) {
           throw new InvalidRpcRequestException(ex, request, "Could not build method request message");
         }
-        RpcController controller = new NettyRpcController();
+        ServerController controller = new ServerController();
+        controllers.put(request.getId(), controller);
         Message methodResponse = null;
         try {
           methodResponse = blockingService.callBlockingMethod(methodDescriptor, controller, methodRequest);
@@ -98,6 +100,7 @@ class ServerHandler extends ChannelInboundHandlerAdapter {
         } else if (methodResponse == null) {
           throw new RpcException(request, "BlockingService RPC returned null response");
         }
+        controllers.remove(request.getId());
         RpcResponse response = NettyRpcProto.RpcResponse.newBuilder()
           .setId(request.getId())
           .setResponseMessage(methodResponse.toByteString())
@@ -121,7 +124,7 @@ class ServerHandler extends ChannelInboundHandlerAdapter {
           throw new InvalidRpcRequestException(ex, request, "Could not build method request message");
         }
         final Channel channel = ctx.channel();
-        final RpcController controller = new NettyRpcController();
+        final RpcController controller = new ServerController();
         RpcCallback<Message> callback = !request.hasId() ? null : new RpcCallback<Message>() {
           public void run(Message methodResponse) {
             if (methodResponse != null) {
