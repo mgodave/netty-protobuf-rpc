@@ -56,7 +56,7 @@ class ServerController implements RpcController {
     }
   }
 
-  void notifyCanceled(boolean isCanceled) {
+  void notifyCanceled() {
     lock.writeLock().lock();
     try {
       canceled = true;
