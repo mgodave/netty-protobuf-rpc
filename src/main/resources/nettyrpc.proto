@@ -79,3 +79,17 @@ enum ErrorCode {
   IO_ERROR = 9; // I/O error while communicating with server
 
 }
+
+message RpcCancelRequest {
+
+	required int32 id = 1;
+
+}
+
+message RpcContainer {
+
+	optional RpcRequest request = 1;
+	optional RpcResponse response = 2;
+	optional RpcCancelRequest cancel = 3;
+
+}

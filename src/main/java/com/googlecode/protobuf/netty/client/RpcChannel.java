@@ -37,6 +37,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static com.google.common.base.Throwables.propagate;
 import static com.google.common.util.concurrent.Futures.addCallback;
 import static com.google.common.util.concurrent.Futures.transform;
+import static com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest;
+import static com.googlecode.protobuf.netty.NettyRpcProto.RpcContainer;
 
 public class RpcChannel implements com.google.protobuf.RpcChannel, BlockingRpcChannel {
 
@@ -56,7 +58,7 @@ public class RpcChannel implements com.google.protobuf.RpcChannel, BlockingRpcCh
     Message request, final Message responsePrototype, boolean blocking) {
 
     ListenableFuture<RpcResponse> result = new RpcCall(buildRequest(blocking, method, request));
-    channel.write(result);
+    channel.writeAndFlush(result);
     return transform(result, new AsyncFunction<RpcResponse, Message>() {
       public ListenableFuture<Message> apply(RpcResponse input) {
         SettableFuture<Message> response = SettableFuture.create();
@@ -123,7 +125,11 @@ public class RpcChannel implements com.google.protobuf.RpcChannel, BlockingRpcCh
   }
 
   void requestCancel() {
-
+    channel.writeAndFlush(
+      RpcContainer.newBuilder()
+        .setCancel(
+          RpcCancelRequest.newBuilder()
+            .setId(sequence.get())));
   }
 
 }

@@ -22,7 +22,7 @@ class Initializer<T extends ServerSocketChannel> extends ChannelInitializer<T> {
     ChannelPipeline p = ch.pipeline();
 
     p.addLast("frameDecoder", new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 4, 0, 4));
-    p.addLast("protobufDecoder", new ProtobufDecoder(NettyRpcProto.RpcResponse.getDefaultInstance()));
+    p.addLast("protobufDecoder", new ProtobufDecoder(NettyRpcProto.RpcContainer.getDefaultInstance()));
 
     p.addLast("frameEncoder", new LengthFieldPrepender(4));
     p.addLast("protobufEncoder", new ProtobufEncoder());

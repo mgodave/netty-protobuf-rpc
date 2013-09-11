@@ -2041,6 +2041,1337 @@ public final class NettyRpcProto {
     // @@protoc_insertion_point(class_scope:RpcResponse)
   }
 
+  public interface RpcCancelRequestOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+
+    // required int32 id = 1;
+    /**
+     * <code>required int32 id = 1;</code>
+     */
+    boolean hasId();
+    /**
+     * <code>required int32 id = 1;</code>
+     */
+    int getId();
+  }
+  /**
+   * Protobuf type {@code RpcCancelRequest}
+   */
+  public static final class RpcCancelRequest extends
+      com.google.protobuf.GeneratedMessage
+      implements RpcCancelRequestOrBuilder {
+    // Use RpcCancelRequest.newBuilder() to construct.
+    private RpcCancelRequest(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private RpcCancelRequest(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final RpcCancelRequest defaultInstance;
+    public static RpcCancelRequest getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public RpcCancelRequest getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private RpcCancelRequest(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 8: {
+              bitField0_ |= 0x00000001;
+              id_ = input.readInt32();
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.googlecode.protobuf.netty.NettyRpcProto.internal_static_RpcCancelRequest_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.googlecode.protobuf.netty.NettyRpcProto.internal_static_RpcCancelRequest_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest.class, com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<RpcCancelRequest> PARSER =
+        new com.google.protobuf.AbstractParser<RpcCancelRequest>() {
+      public RpcCancelRequest parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new RpcCancelRequest(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<RpcCancelRequest> getParserForType() {
+      return PARSER;
+    }
+
+    private int bitField0_;
+    // required int32 id = 1;
+    public static final int ID_FIELD_NUMBER = 1;
+    private int id_;
+    /**
+     * <code>required int32 id = 1;</code>
+     */
+    public boolean hasId() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>required int32 id = 1;</code>
+     */
+    public int getId() {
+      return id_;
+    }
+
+    private void initFields() {
+      id_ = 0;
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+
+      if (!hasId()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeInt32(1, id_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(1, id_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code RpcCancelRequest}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequestOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.googlecode.protobuf.netty.NettyRpcProto.internal_static_RpcCancelRequest_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.googlecode.protobuf.netty.NettyRpcProto.internal_static_RpcCancelRequest_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest.class, com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest.Builder.class);
+      }
+
+      // Construct using com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        id_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.googlecode.protobuf.netty.NettyRpcProto.internal_static_RpcCancelRequest_descriptor;
+      }
+
+      public com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest getDefaultInstanceForType() {
+        return com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest.getDefaultInstance();
+      }
+
+      public com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest build() {
+        com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest buildPartial() {
+        com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest result = new com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.id_ = id_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest) {
+          return mergeFrom((com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest other) {
+        if (other == com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest.getDefaultInstance()) return this;
+        if (other.hasId()) {
+          setId(other.getId());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        if (!hasId()) {
+          
+          return false;
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      // required int32 id = 1;
+      private int id_ ;
+      /**
+       * <code>required int32 id = 1;</code>
+       */
+      public boolean hasId() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>required int32 id = 1;</code>
+       */
+      public int getId() {
+        return id_;
+      }
+      /**
+       * <code>required int32 id = 1;</code>
+       */
+      public Builder setId(int value) {
+        bitField0_ |= 0x00000001;
+        id_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required int32 id = 1;</code>
+       */
+      public Builder clearId() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        id_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:RpcCancelRequest)
+    }
+
+    static {
+      defaultInstance = new RpcCancelRequest(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:RpcCancelRequest)
+  }
+
+  public interface RpcContainerOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+
+    // optional .RpcRequest request = 1;
+    /**
+     * <code>optional .RpcRequest request = 1;</code>
+     */
+    boolean hasRequest();
+    /**
+     * <code>optional .RpcRequest request = 1;</code>
+     */
+    com.googlecode.protobuf.netty.NettyRpcProto.RpcRequest getRequest();
+    /**
+     * <code>optional .RpcRequest request = 1;</code>
+     */
+    com.googlecode.protobuf.netty.NettyRpcProto.RpcRequestOrBuilder getRequestOrBuilder();
+
+    // optional .RpcResponse response = 2;
+    /**
+     * <code>optional .RpcResponse response = 2;</code>
+     */
+    boolean hasResponse();
+    /**
+     * <code>optional .RpcResponse response = 2;</code>
+     */
+    com.googlecode.protobuf.netty.NettyRpcProto.RpcResponse getResponse();
+    /**
+     * <code>optional .RpcResponse response = 2;</code>
+     */
+    com.googlecode.protobuf.netty.NettyRpcProto.RpcResponseOrBuilder getResponseOrBuilder();
+
+    // optional .RpcCancelRequest cancel = 3;
+    /**
+     * <code>optional .RpcCancelRequest cancel = 3;</code>
+     */
+    boolean hasCancel();
+    /**
+     * <code>optional .RpcCancelRequest cancel = 3;</code>
+     */
+    com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest getCancel();
+    /**
+     * <code>optional .RpcCancelRequest cancel = 3;</code>
+     */
+    com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequestOrBuilder getCancelOrBuilder();
+  }
+  /**
+   * Protobuf type {@code RpcContainer}
+   */
+  public static final class RpcContainer extends
+      com.google.protobuf.GeneratedMessage
+      implements RpcContainerOrBuilder {
+    // Use RpcContainer.newBuilder() to construct.
+    private RpcContainer(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private RpcContainer(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final RpcContainer defaultInstance;
+    public static RpcContainer getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public RpcContainer getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private RpcContainer(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              com.googlecode.protobuf.netty.NettyRpcProto.RpcRequest.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000001) == 0x00000001)) {
+                subBuilder = request_.toBuilder();
+              }
+              request_ = input.readMessage(com.googlecode.protobuf.netty.NettyRpcProto.RpcRequest.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(request_);
+                request_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000001;
+              break;
+            }
+            case 18: {
+              com.googlecode.protobuf.netty.NettyRpcProto.RpcResponse.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000002) == 0x00000002)) {
+                subBuilder = response_.toBuilder();
+              }
+              response_ = input.readMessage(com.googlecode.protobuf.netty.NettyRpcProto.RpcResponse.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(response_);
+                response_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000002;
+              break;
+            }
+            case 26: {
+              com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000004) == 0x00000004)) {
+                subBuilder = cancel_.toBuilder();
+              }
+              cancel_ = input.readMessage(com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(cancel_);
+                cancel_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000004;
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.googlecode.protobuf.netty.NettyRpcProto.internal_static_RpcContainer_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.googlecode.protobuf.netty.NettyRpcProto.internal_static_RpcContainer_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              com.googlecode.protobuf.netty.NettyRpcProto.RpcContainer.class, com.googlecode.protobuf.netty.NettyRpcProto.RpcContainer.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<RpcContainer> PARSER =
+        new com.google.protobuf.AbstractParser<RpcContainer>() {
+      public RpcContainer parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new RpcContainer(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<RpcContainer> getParserForType() {
+      return PARSER;
+    }
+
+    private int bitField0_;
+    // optional .RpcRequest request = 1;
+    public static final int REQUEST_FIELD_NUMBER = 1;
+    private com.googlecode.protobuf.netty.NettyRpcProto.RpcRequest request_;
+    /**
+     * <code>optional .RpcRequest request = 1;</code>
+     */
+    public boolean hasRequest() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>optional .RpcRequest request = 1;</code>
+     */
+    public com.googlecode.protobuf.netty.NettyRpcProto.RpcRequest getRequest() {
+      return request_;
+    }
+    /**
+     * <code>optional .RpcRequest request = 1;</code>
+     */
+    public com.googlecode.protobuf.netty.NettyRpcProto.RpcRequestOrBuilder getRequestOrBuilder() {
+      return request_;
+    }
+
+    // optional .RpcResponse response = 2;
+    public static final int RESPONSE_FIELD_NUMBER = 2;
+    private com.googlecode.protobuf.netty.NettyRpcProto.RpcResponse response_;
+    /**
+     * <code>optional .RpcResponse response = 2;</code>
+     */
+    public boolean hasResponse() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>optional .RpcResponse response = 2;</code>
+     */
+    public com.googlecode.protobuf.netty.NettyRpcProto.RpcResponse getResponse() {
+      return response_;
+    }
+    /**
+     * <code>optional .RpcResponse response = 2;</code>
+     */
+    public com.googlecode.protobuf.netty.NettyRpcProto.RpcResponseOrBuilder getResponseOrBuilder() {
+      return response_;
+    }
+
+    // optional .RpcCancelRequest cancel = 3;
+    public static final int CANCEL_FIELD_NUMBER = 3;
+    private com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest cancel_;
+    /**
+     * <code>optional .RpcCancelRequest cancel = 3;</code>
+     */
+    public boolean hasCancel() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>optional .RpcCancelRequest cancel = 3;</code>
+     */
+    public com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest getCancel() {
+      return cancel_;
+    }
+    /**
+     * <code>optional .RpcCancelRequest cancel = 3;</code>
+     */
+    public com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequestOrBuilder getCancelOrBuilder() {
+      return cancel_;
+    }
+
+    private void initFields() {
+      request_ = com.googlecode.protobuf.netty.NettyRpcProto.RpcRequest.getDefaultInstance();
+      response_ = com.googlecode.protobuf.netty.NettyRpcProto.RpcResponse.getDefaultInstance();
+      cancel_ = com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest.getDefaultInstance();
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+
+      if (hasRequest()) {
+        if (!getRequest().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      if (hasResponse()) {
+        if (!getResponse().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      if (hasCancel()) {
+        if (!getCancel().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeMessage(1, request_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeMessage(2, response_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeMessage(3, cancel_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(1, request_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(2, response_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(3, cancel_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static com.googlecode.protobuf.netty.NettyRpcProto.RpcContainer parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.googlecode.protobuf.netty.NettyRpcProto.RpcContainer parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.googlecode.protobuf.netty.NettyRpcProto.RpcContainer parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.googlecode.protobuf.netty.NettyRpcProto.RpcContainer parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.googlecode.protobuf.netty.NettyRpcProto.RpcContainer parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static com.googlecode.protobuf.netty.NettyRpcProto.RpcContainer parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static com.googlecode.protobuf.netty.NettyRpcProto.RpcContainer parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static com.googlecode.protobuf.netty.NettyRpcProto.RpcContainer parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static com.googlecode.protobuf.netty.NettyRpcProto.RpcContainer parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static com.googlecode.protobuf.netty.NettyRpcProto.RpcContainer parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(com.googlecode.protobuf.netty.NettyRpcProto.RpcContainer prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code RpcContainer}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.googlecode.protobuf.netty.NettyRpcProto.RpcContainerOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.googlecode.protobuf.netty.NettyRpcProto.internal_static_RpcContainer_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.googlecode.protobuf.netty.NettyRpcProto.internal_static_RpcContainer_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.googlecode.protobuf.netty.NettyRpcProto.RpcContainer.class, com.googlecode.protobuf.netty.NettyRpcProto.RpcContainer.Builder.class);
+      }
+
+      // Construct using com.googlecode.protobuf.netty.NettyRpcProto.RpcContainer.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getRequestFieldBuilder();
+          getResponseFieldBuilder();
+          getCancelFieldBuilder();
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        if (requestBuilder_ == null) {
+          request_ = com.googlecode.protobuf.netty.NettyRpcProto.RpcRequest.getDefaultInstance();
+        } else {
+          requestBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000001);
+        if (responseBuilder_ == null) {
+          response_ = com.googlecode.protobuf.netty.NettyRpcProto.RpcResponse.getDefaultInstance();
+        } else {
+          responseBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000002);
+        if (cancelBuilder_ == null) {
+          cancel_ = com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest.getDefaultInstance();
+        } else {
+          cancelBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000004);
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.googlecode.protobuf.netty.NettyRpcProto.internal_static_RpcContainer_descriptor;
+      }
+
+      public com.googlecode.protobuf.netty.NettyRpcProto.RpcContainer getDefaultInstanceForType() {
+        return com.googlecode.protobuf.netty.NettyRpcProto.RpcContainer.getDefaultInstance();
+      }
+
+      public com.googlecode.protobuf.netty.NettyRpcProto.RpcContainer build() {
+        com.googlecode.protobuf.netty.NettyRpcProto.RpcContainer result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public com.googlecode.protobuf.netty.NettyRpcProto.RpcContainer buildPartial() {
+        com.googlecode.protobuf.netty.NettyRpcProto.RpcContainer result = new com.googlecode.protobuf.netty.NettyRpcProto.RpcContainer(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        if (requestBuilder_ == null) {
+          result.request_ = request_;
+        } else {
+          result.request_ = requestBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        if (responseBuilder_ == null) {
+          result.response_ = response_;
+        } else {
+          result.response_ = responseBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        if (cancelBuilder_ == null) {
+          result.cancel_ = cancel_;
+        } else {
+          result.cancel_ = cancelBuilder_.build();
+        }
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.googlecode.protobuf.netty.NettyRpcProto.RpcContainer) {
+          return mergeFrom((com.googlecode.protobuf.netty.NettyRpcProto.RpcContainer)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(com.googlecode.protobuf.netty.NettyRpcProto.RpcContainer other) {
+        if (other == com.googlecode.protobuf.netty.NettyRpcProto.RpcContainer.getDefaultInstance()) return this;
+        if (other.hasRequest()) {
+          mergeRequest(other.getRequest());
+        }
+        if (other.hasResponse()) {
+          mergeResponse(other.getResponse());
+        }
+        if (other.hasCancel()) {
+          mergeCancel(other.getCancel());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        if (hasRequest()) {
+          if (!getRequest().isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasResponse()) {
+          if (!getResponse().isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasCancel()) {
+          if (!getCancel().isInitialized()) {
+            
+            return false;
+          }
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.googlecode.protobuf.netty.NettyRpcProto.RpcContainer parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (com.googlecode.protobuf.netty.NettyRpcProto.RpcContainer) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      // optional .RpcRequest request = 1;
+      private com.googlecode.protobuf.netty.NettyRpcProto.RpcRequest request_ = com.googlecode.protobuf.netty.NettyRpcProto.RpcRequest.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          com.googlecode.protobuf.netty.NettyRpcProto.RpcRequest, com.googlecode.protobuf.netty.NettyRpcProto.RpcRequest.Builder, com.googlecode.protobuf.netty.NettyRpcProto.RpcRequestOrBuilder> requestBuilder_;
+      /**
+       * <code>optional .RpcRequest request = 1;</code>
+       */
+      public boolean hasRequest() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>optional .RpcRequest request = 1;</code>
+       */
+      public com.googlecode.protobuf.netty.NettyRpcProto.RpcRequest getRequest() {
+        if (requestBuilder_ == null) {
+          return request_;
+        } else {
+          return requestBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .RpcRequest request = 1;</code>
+       */
+      public Builder setRequest(com.googlecode.protobuf.netty.NettyRpcProto.RpcRequest value) {
+        if (requestBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          request_ = value;
+          onChanged();
+        } else {
+          requestBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000001;
+        return this;
+      }
+      /**
+       * <code>optional .RpcRequest request = 1;</code>
+       */
+      public Builder setRequest(
+          com.googlecode.protobuf.netty.NettyRpcProto.RpcRequest.Builder builderForValue) {
+        if (requestBuilder_ == null) {
+          request_ = builderForValue.build();
+          onChanged();
+        } else {
+          requestBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000001;
+        return this;
+      }
+      /**
+       * <code>optional .RpcRequest request = 1;</code>
+       */
+      public Builder mergeRequest(com.googlecode.protobuf.netty.NettyRpcProto.RpcRequest value) {
+        if (requestBuilder_ == null) {
+          if (((bitField0_ & 0x00000001) == 0x00000001) &&
+              request_ != com.googlecode.protobuf.netty.NettyRpcProto.RpcRequest.getDefaultInstance()) {
+            request_ =
+              com.googlecode.protobuf.netty.NettyRpcProto.RpcRequest.newBuilder(request_).mergeFrom(value).buildPartial();
+          } else {
+            request_ = value;
+          }
+          onChanged();
+        } else {
+          requestBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000001;
+        return this;
+      }
+      /**
+       * <code>optional .RpcRequest request = 1;</code>
+       */
+      public Builder clearRequest() {
+        if (requestBuilder_ == null) {
+          request_ = com.googlecode.protobuf.netty.NettyRpcProto.RpcRequest.getDefaultInstance();
+          onChanged();
+        } else {
+          requestBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000001);
+        return this;
+      }
+      /**
+       * <code>optional .RpcRequest request = 1;</code>
+       */
+      public com.googlecode.protobuf.netty.NettyRpcProto.RpcRequest.Builder getRequestBuilder() {
+        bitField0_ |= 0x00000001;
+        onChanged();
+        return getRequestFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .RpcRequest request = 1;</code>
+       */
+      public com.googlecode.protobuf.netty.NettyRpcProto.RpcRequestOrBuilder getRequestOrBuilder() {
+        if (requestBuilder_ != null) {
+          return requestBuilder_.getMessageOrBuilder();
+        } else {
+          return request_;
+        }
+      }
+      /**
+       * <code>optional .RpcRequest request = 1;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          com.googlecode.protobuf.netty.NettyRpcProto.RpcRequest, com.googlecode.protobuf.netty.NettyRpcProto.RpcRequest.Builder, com.googlecode.protobuf.netty.NettyRpcProto.RpcRequestOrBuilder> 
+          getRequestFieldBuilder() {
+        if (requestBuilder_ == null) {
+          requestBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              com.googlecode.protobuf.netty.NettyRpcProto.RpcRequest, com.googlecode.protobuf.netty.NettyRpcProto.RpcRequest.Builder, com.googlecode.protobuf.netty.NettyRpcProto.RpcRequestOrBuilder>(
+                  request_,
+                  getParentForChildren(),
+                  isClean());
+          request_ = null;
+        }
+        return requestBuilder_;
+      }
+
+      // optional .RpcResponse response = 2;
+      private com.googlecode.protobuf.netty.NettyRpcProto.RpcResponse response_ = com.googlecode.protobuf.netty.NettyRpcProto.RpcResponse.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          com.googlecode.protobuf.netty.NettyRpcProto.RpcResponse, com.googlecode.protobuf.netty.NettyRpcProto.RpcResponse.Builder, com.googlecode.protobuf.netty.NettyRpcProto.RpcResponseOrBuilder> responseBuilder_;
+      /**
+       * <code>optional .RpcResponse response = 2;</code>
+       */
+      public boolean hasResponse() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>optional .RpcResponse response = 2;</code>
+       */
+      public com.googlecode.protobuf.netty.NettyRpcProto.RpcResponse getResponse() {
+        if (responseBuilder_ == null) {
+          return response_;
+        } else {
+          return responseBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .RpcResponse response = 2;</code>
+       */
+      public Builder setResponse(com.googlecode.protobuf.netty.NettyRpcProto.RpcResponse value) {
+        if (responseBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          response_ = value;
+          onChanged();
+        } else {
+          responseBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000002;
+        return this;
+      }
+      /**
+       * <code>optional .RpcResponse response = 2;</code>
+       */
+      public Builder setResponse(
+          com.googlecode.protobuf.netty.NettyRpcProto.RpcResponse.Builder builderForValue) {
+        if (responseBuilder_ == null) {
+          response_ = builderForValue.build();
+          onChanged();
+        } else {
+          responseBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000002;
+        return this;
+      }
+      /**
+       * <code>optional .RpcResponse response = 2;</code>
+       */
+      public Builder mergeResponse(com.googlecode.protobuf.netty.NettyRpcProto.RpcResponse value) {
+        if (responseBuilder_ == null) {
+          if (((bitField0_ & 0x00000002) == 0x00000002) &&
+              response_ != com.googlecode.protobuf.netty.NettyRpcProto.RpcResponse.getDefaultInstance()) {
+            response_ =
+              com.googlecode.protobuf.netty.NettyRpcProto.RpcResponse.newBuilder(response_).mergeFrom(value).buildPartial();
+          } else {
+            response_ = value;
+          }
+          onChanged();
+        } else {
+          responseBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000002;
+        return this;
+      }
+      /**
+       * <code>optional .RpcResponse response = 2;</code>
+       */
+      public Builder clearResponse() {
+        if (responseBuilder_ == null) {
+          response_ = com.googlecode.protobuf.netty.NettyRpcProto.RpcResponse.getDefaultInstance();
+          onChanged();
+        } else {
+          responseBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000002);
+        return this;
+      }
+      /**
+       * <code>optional .RpcResponse response = 2;</code>
+       */
+      public com.googlecode.protobuf.netty.NettyRpcProto.RpcResponse.Builder getResponseBuilder() {
+        bitField0_ |= 0x00000002;
+        onChanged();
+        return getResponseFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .RpcResponse response = 2;</code>
+       */
+      public com.googlecode.protobuf.netty.NettyRpcProto.RpcResponseOrBuilder getResponseOrBuilder() {
+        if (responseBuilder_ != null) {
+          return responseBuilder_.getMessageOrBuilder();
+        } else {
+          return response_;
+        }
+      }
+      /**
+       * <code>optional .RpcResponse response = 2;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          com.googlecode.protobuf.netty.NettyRpcProto.RpcResponse, com.googlecode.protobuf.netty.NettyRpcProto.RpcResponse.Builder, com.googlecode.protobuf.netty.NettyRpcProto.RpcResponseOrBuilder> 
+          getResponseFieldBuilder() {
+        if (responseBuilder_ == null) {
+          responseBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              com.googlecode.protobuf.netty.NettyRpcProto.RpcResponse, com.googlecode.protobuf.netty.NettyRpcProto.RpcResponse.Builder, com.googlecode.protobuf.netty.NettyRpcProto.RpcResponseOrBuilder>(
+                  response_,
+                  getParentForChildren(),
+                  isClean());
+          response_ = null;
+        }
+        return responseBuilder_;
+      }
+
+      // optional .RpcCancelRequest cancel = 3;
+      private com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest cancel_ = com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest, com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest.Builder, com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequestOrBuilder> cancelBuilder_;
+      /**
+       * <code>optional .RpcCancelRequest cancel = 3;</code>
+       */
+      public boolean hasCancel() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>optional .RpcCancelRequest cancel = 3;</code>
+       */
+      public com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest getCancel() {
+        if (cancelBuilder_ == null) {
+          return cancel_;
+        } else {
+          return cancelBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .RpcCancelRequest cancel = 3;</code>
+       */
+      public Builder setCancel(com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest value) {
+        if (cancelBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          cancel_ = value;
+          onChanged();
+        } else {
+          cancelBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000004;
+        return this;
+      }
+      /**
+       * <code>optional .RpcCancelRequest cancel = 3;</code>
+       */
+      public Builder setCancel(
+          com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest.Builder builderForValue) {
+        if (cancelBuilder_ == null) {
+          cancel_ = builderForValue.build();
+          onChanged();
+        } else {
+          cancelBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000004;
+        return this;
+      }
+      /**
+       * <code>optional .RpcCancelRequest cancel = 3;</code>
+       */
+      public Builder mergeCancel(com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest value) {
+        if (cancelBuilder_ == null) {
+          if (((bitField0_ & 0x00000004) == 0x00000004) &&
+              cancel_ != com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest.getDefaultInstance()) {
+            cancel_ =
+              com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest.newBuilder(cancel_).mergeFrom(value).buildPartial();
+          } else {
+            cancel_ = value;
+          }
+          onChanged();
+        } else {
+          cancelBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000004;
+        return this;
+      }
+      /**
+       * <code>optional .RpcCancelRequest cancel = 3;</code>
+       */
+      public Builder clearCancel() {
+        if (cancelBuilder_ == null) {
+          cancel_ = com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest.getDefaultInstance();
+          onChanged();
+        } else {
+          cancelBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000004);
+        return this;
+      }
+      /**
+       * <code>optional .RpcCancelRequest cancel = 3;</code>
+       */
+      public com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest.Builder getCancelBuilder() {
+        bitField0_ |= 0x00000004;
+        onChanged();
+        return getCancelFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .RpcCancelRequest cancel = 3;</code>
+       */
+      public com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequestOrBuilder getCancelOrBuilder() {
+        if (cancelBuilder_ != null) {
+          return cancelBuilder_.getMessageOrBuilder();
+        } else {
+          return cancel_;
+        }
+      }
+      /**
+       * <code>optional .RpcCancelRequest cancel = 3;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest, com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest.Builder, com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequestOrBuilder> 
+          getCancelFieldBuilder() {
+        if (cancelBuilder_ == null) {
+          cancelBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest, com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequest.Builder, com.googlecode.protobuf.netty.NettyRpcProto.RpcCancelRequestOrBuilder>(
+                  cancel_,
+                  getParentForChildren(),
+                  isClean());
+          cancel_ = null;
+        }
+        return cancelBuilder_;
+      }
+
+      // @@protoc_insertion_point(builder_scope:RpcContainer)
+    }
+
+    static {
+      defaultInstance = new RpcContainer(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:RpcContainer)
+  }
+
   private static com.google.protobuf.Descriptors.Descriptor
     internal_static_RpcRequest_descriptor;
   private static
@@ -2051,6 +3382,16 @@ public final class NettyRpcProto {
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_RpcResponse_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_RpcCancelRequest_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_RpcCancelRequest_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_RpcContainer_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_RpcContainer_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -2066,13 +3407,17 @@ public final class NettyRpcProto {
       "quest_message\030\005 \002(\014\"j\n\013RpcResponse\022\n\n\002id" +
       "\030\001 \002(\005\022\030\n\020response_message\030\002 \001(\014\022\036\n\nerro" +
       "r_code\030\003 \001(\0162\n.ErrorCode\022\025\n\rerror_messag" +
-      "e\030\004 \001(\t*\327\001\n\tErrorCode\022\024\n\020BAD_REQUEST_DAT" +
-      "A\020\000\022\025\n\021BAD_REQUEST_PROTO\020\001\022\025\n\021SERVICE_NO" +
-      "T_FOUND\020\002\022\024\n\020METHOD_NOT_FOUND\020\003\022\r\n\tRPC_E" +
-      "RROR\020\004\022\016\n\nRPC_FAILED\020\005\022\031\n\025INVALID_REQUES",
-      "T_PROTO\020\006\022\026\n\022BAD_RESPONSE_PROTO\020\007\022\020\n\014UNK" +
-      "NOWN_HOST\020\010\022\014\n\010IO_ERROR\020\tB3\n\035com.googlec" +
-      "ode.protobuf.nettyB\rNettyRpcProtoH\001\210\001\001"
+      "e\030\004 \001(\t\"\036\n\020RpcCancelRequest\022\n\n\002id\030\001 \002(\005\"" +
+      "o\n\014RpcContainer\022\034\n\007request\030\001 \001(\0132\013.RpcRe" +
+      "quest\022\036\n\010response\030\002 \001(\0132\014.RpcResponse\022!\n" +
+      "\006cancel\030\003 \001(\0132\021.RpcCancelRequest*\327\001\n\tErr",
+      "orCode\022\024\n\020BAD_REQUEST_DATA\020\000\022\025\n\021BAD_REQU" +
+      "EST_PROTO\020\001\022\025\n\021SERVICE_NOT_FOUND\020\002\022\024\n\020ME" +
+      "THOD_NOT_FOUND\020\003\022\r\n\tRPC_ERROR\020\004\022\016\n\nRPC_F" +
+      "AILED\020\005\022\031\n\025INVALID_REQUEST_PROTO\020\006\022\026\n\022BA" +
+      "D_RESPONSE_PROTO\020\007\022\020\n\014UNKNOWN_HOST\020\010\022\014\n\010" +
+      "IO_ERROR\020\tB3\n\035com.googlecode.protobuf.ne" +
+      "ttyB\rNettyRpcProtoH\001\210\001\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -2091,6 +3436,18 @@ public final class NettyRpcProto {
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_RpcResponse_descriptor,
               new java.lang.String[] { "Id", "ResponseMessage", "ErrorCode", "ErrorMessage", });
+          internal_static_RpcCancelRequest_descriptor =
+            getDescriptor().getMessageTypes().get(2);
+          internal_static_RpcCancelRequest_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_RpcCancelRequest_descriptor,
+              new java.lang.String[] { "Id", });
+          internal_static_RpcContainer_descriptor =
+            getDescriptor().getMessageTypes().get(3);
+          internal_static_RpcContainer_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_RpcContainer_descriptor,
+              new java.lang.String[] { "Request", "Response", "Cancel", });
           return null;
         }
       };

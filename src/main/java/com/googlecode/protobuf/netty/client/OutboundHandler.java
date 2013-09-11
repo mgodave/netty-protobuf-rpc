@@ -7,6 +7,7 @@ import io.netty.channel.ChannelPromise;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static com.googlecode.protobuf.netty.NettyRpcProto.RpcContainer;
 
 class OutboundHandler extends ChannelOutboundHandlerAdapter {
 
@@ -23,7 +24,9 @@ class OutboundHandler extends ChannelOutboundHandlerAdapter {
 
     RpcCall call = (RpcCall) msg;
     rpcMap.put(call.getRequest().getId(), call);
-    ctx.writeAndFlush(call.getRequest());
+    ctx.writeAndFlush(
+      RpcContainer.newBuilder()
+        .setRequest(call.getRequest()));
 
   }
 
