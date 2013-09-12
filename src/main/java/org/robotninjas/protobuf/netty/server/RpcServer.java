@@ -55,7 +55,7 @@ public class RpcServer extends AbstractService {
     this.handler = new ServerHandler(allChannels);
     this.bootstrap = new ServerBootstrap();
     bootstrap.channel(channel);
-    bootstrap.handler(new Initializer(handler));
+    bootstrap.childHandler(new Initializer(handler));
     bootstrap.group(eventLoopGroup);
   }
 

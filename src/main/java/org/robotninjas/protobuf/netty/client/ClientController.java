@@ -5,12 +5,12 @@ import com.google.protobuf.RpcController;
 
 public class ClientController implements RpcController {
 
-  private final RpcChannel channel;
+  private final NettyRpcChannel channel;
   private volatile String errorText = new String();
   private volatile boolean failed = false;
   private volatile boolean startCancelRequested;
 
-  public ClientController(RpcChannel channel) {
+  public ClientController(NettyRpcChannel channel) {
     this.channel = channel;
   }
 
@@ -36,6 +36,11 @@ public class ClientController implements RpcController {
       startCancelRequested = true;
       channel.requestCancel();
     }
+  }
+
+  void notifyFailed(String reason) {
+    this.failed = true;
+    this.errorText = reason;
   }
 
   @Override

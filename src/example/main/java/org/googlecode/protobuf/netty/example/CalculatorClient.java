@@ -24,15 +24,13 @@ package org.googlecode.protobuf.netty.example;
 import com.google.protobuf.RpcCallback;
 import com.google.protobuf.RpcController;
 import com.google.protobuf.ServiceException;
-import org.robotninjas.protobuf.netty.client.RpcChannel;
+import org.robotninjas.protobuf.netty.client.NettyRpcChannel;
 import org.robotninjas.protobuf.netty.client.RpcClient;
 import org.googlecode.protobuf.netty.example.Calculator.CalcRequest;
 import org.googlecode.protobuf.netty.example.Calculator.CalcResponse;
 import org.googlecode.protobuf.netty.example.Calculator.CalcService;
 import org.googlecode.protobuf.netty.example.Calculator.CalcService.BlockingInterface;
 import org.googlecode.protobuf.netty.example.Calculator.CalcService.Stub;
-import org.robotninjas.protobuf.netty.client.RpcChannel;
-import org.robotninjas.protobuf.netty.client.RpcClient;
 import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 
 import java.net.InetSocketAddress;
@@ -47,7 +45,7 @@ public class CalculatorClient {
 						Executors.newCachedThreadPool(), 
 						Executors.newCachedThreadPool()));
 		
-		RpcChannel channel = client.connect(new InetSocketAddress("localhost", 8080));
+		NettyRpcChannel channel = client.connect(new InetSocketAddress("localhost", 8080));
 		
 		Stub calcService = CalcService.newStub(channel);
 		

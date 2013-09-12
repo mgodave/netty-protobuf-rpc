@@ -24,8 +24,6 @@ package org.robotninjas.protobuf.netty.client;
 import com.google.common.util.concurrent.*;
 import com.google.protobuf.*;
 import com.google.protobuf.Descriptors.MethodDescriptor;
-import org.robotninjas.protobuf.netty.NettyRpcProto.RpcRequest;
-import org.robotninjas.protobuf.netty.NettyRpcProto.RpcResponse;
 import io.netty.channel.Channel;
 import org.robotninjas.protobuf.netty.NettyRpcProto;
 
@@ -34,16 +32,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.google.common.base.Throwables.propagate;
 import static com.google.common.util.concurrent.Futures.addCallback;
-import static com.google.common.util.concurrent.Futures.transform;
-import static org.robotninjas.protobuf.netty.NettyRpcProto.RpcCancelRequest;
-import static org.robotninjas.protobuf.netty.NettyRpcProto.RpcContainer;
 
-public class RpcChannel implements com.google.protobuf.RpcChannel, BlockingRpcChannel {
-
+public class NettyRpcChannel implements com.google.protobuf.RpcChannel, BlockingRpcChannel {
   private final Channel channel;
   private final AtomicInteger sequence = new AtomicInteger(0);
 
-  RpcChannel(Channel channel) {
+  NettyRpcChannel(Channel channel) {
     this.channel = channel;
   }
 

@@ -24,7 +24,7 @@ package org.robotninjas.protobuf.netty.client;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.EventLoopGroup;
-import io.netty.channel.nio.NioEventLoop;
+import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.oio.OioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
@@ -44,7 +44,7 @@ public class RpcClient {
   }
 
   @Inject
-  public RpcClient(NioEventLoop eventLoopGroup) {
+  public RpcClient(NioEventLoopGroup eventLoopGroup) {
     this(eventLoopGroup, NioSocketChannel.class);
   }
 
@@ -52,9 +52,9 @@ public class RpcClient {
     this(eventLoopGroup, OioSocketChannel.class);
   }
 
-  public RpcChannel connect(SocketAddress sa) throws InterruptedException {
+  public NettyRpcChannel connect(SocketAddress sa) throws InterruptedException {
     ChannelFuture f = bootstrap.connect(sa).await();
-    return new RpcChannel(f.channel());
+    return new NettyRpcChannel(f.channel());
   }
 
 }
