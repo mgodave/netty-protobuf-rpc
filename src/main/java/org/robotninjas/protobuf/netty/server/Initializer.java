@@ -1,16 +1,15 @@
 package org.robotninjas.protobuf.netty.server;
 
-import org.robotninjas.protobuf.netty.NettyRpcProto;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
-import io.netty.channel.socket.ServerSocketChannel;
+import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.LengthFieldPrepender;
 import io.netty.handler.codec.protobuf.ProtobufDecoder;
 import io.netty.handler.codec.protobuf.ProtobufEncoder;
 import org.robotninjas.protobuf.netty.NettyRpcProto;
 
-class Initializer<T extends ServerSocketChannel> extends ChannelInitializer<T> {
+class Initializer<T extends SocketChannel> extends ChannelInitializer<T> {
 
   private final ServerHandler handler;
 
@@ -19,7 +18,7 @@ class Initializer<T extends ServerSocketChannel> extends ChannelInitializer<T> {
   }
 
   @Override
-  protected void initChannel(ServerSocketChannel ch) throws Exception {
+  protected void initChannel(SocketChannel ch) throws Exception {
     ChannelPipeline p = ch.pipeline();
 
     p.addLast("frameDecoder", new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 4, 0, 4));

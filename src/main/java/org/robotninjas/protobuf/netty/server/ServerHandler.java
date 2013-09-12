@@ -24,23 +24,19 @@ package org.robotninjas.protobuf.netty.server;
 import com.google.common.base.Preconditions;
 import com.google.protobuf.*;
 import com.google.protobuf.Descriptors.MethodDescriptor;
-import org.robotninjas.protobuf.netty.*;
-import org.robotninjas.protobuf.netty.NettyRpcProto.ErrorCode;
-import org.robotninjas.protobuf.netty.NettyRpcProto.RpcRequest;
-import org.robotninjas.protobuf.netty.NettyRpcProto.RpcResponse;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.group.ChannelGroup;
-import org.googlecode.protobuf.netty.*;
+import org.robotninjas.protobuf.netty.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static org.robotninjas.protobuf.netty.NettyRpcProto.RpcCancelRequest;
 import static org.robotninjas.protobuf.netty.NettyRpcProto.RpcContainer;
+import static org.robotninjas.protobuf.netty.NettyRpcProto.RpcResponse;
 
 class ServerHandler extends ChannelInboundHandlerAdapter {
 
@@ -64,8 +60,8 @@ class ServerHandler extends ChannelInboundHandlerAdapter {
   @Override
   public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 
-    Preconditions.checkArgument(msg instanceof NettyRpcProto.RpcContainer);
-    NettyRpcProto.RpcContainer container = (NettyRpcProto.RpcContainer) msg;
+    Preconditions.checkArgument(msg instanceof RpcContainer);
+    RpcContainer container = (RpcContainer) msg;
 
     if (container.hasCancel()) {
       NettyRpcProto.RpcCancelRequest cancel = container.getCancel();
@@ -120,11 +116,11 @@ class ServerHandler extends ChannelInboundHandlerAdapter {
           throw new RpcException(request, "BlockingService RPC returned null response");
         }
         controllers.remove(request.getId());
-        NettyRpcProto.RpcResponse response = NettyRpcProto.RpcResponse.newBuilder()
+        RpcResponse response = RpcResponse.newBuilder()
           .setId(request.getId())
           .setResponseMessage(methodResponse.toByteString())
           .build();
-        ctx.channel().writeAndFlush(response);
+        ctx.channel().writeAndFlush(RpcContainer.newBuilder().setResponse(response));
       }
     } else {
       Service service = serviceMap.get(serviceName);
@@ -148,19 +144,20 @@ class ServerHandler extends ChannelInboundHandlerAdapter {
         RpcCallback<Message> callback = !request.hasId() ? null : new RpcCallback<Message>() {
           public void run(Message methodResponse) {
             if (methodResponse != null) {
-              channel.writeAndFlush(NettyRpcProto.RpcResponse.newBuilder()
-                .setId(request.getId())
-                .setResponseMessage(methodResponse.toByteString())
-                .build());
+              channel.writeAndFlush(
+                RpcContainer.newBuilder()
+                  .setResponse(RpcResponse.newBuilder()
+                    .setId(request.getId())
+                    .setResponseMessage(methodResponse.toByteString())));
             } else {
               logger.info("service callback returned null message");
-              NettyRpcProto.RpcResponse.Builder builder = NettyRpcProto.RpcResponse.newBuilder()
+              RpcResponse.Builder builder = RpcResponse.newBuilder()
                 .setId(request.getId())
                 .setErrorCode(NettyRpcProto.ErrorCode.RPC_ERROR);
               if (controller.errorText() != null) {
                 builder.setErrorMessage(controller.errorText());
               }
-              channel.writeAndFlush(builder.build());
+              channel.writeAndFlush(RpcContainer.newBuilder().setResponse(builder));
             }
             controllers.remove(request.getId());
           }
@@ -177,7 +174,7 @@ class ServerHandler extends ChannelInboundHandlerAdapter {
   @Override
   public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
     logger.warn("exceptionCaught", cause);
-    NettyRpcProto.RpcResponse.Builder responseBuilder = NettyRpcProto.RpcResponse.newBuilder();
+    RpcResponse.Builder responseBuilder = RpcResponse.newBuilder();
     if (cause instanceof NoSuchServiceException) {
       responseBuilder.setErrorCode(NettyRpcProto.ErrorCode.SERVICE_NOT_FOUND);
     } else if (cause instanceof NoSuchServiceMethodException) {
