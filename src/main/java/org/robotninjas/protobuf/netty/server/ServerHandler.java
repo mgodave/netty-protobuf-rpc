@@ -25,6 +25,7 @@ import com.google.common.base.Preconditions;
 import com.google.protobuf.*;
 import com.google.protobuf.Descriptors.MethodDescriptor;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.group.ChannelGroup;
@@ -38,6 +39,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import static org.robotninjas.protobuf.netty.NettyRpcProto.RpcContainer;
 import static org.robotninjas.protobuf.netty.NettyRpcProto.RpcResponse;
 
+@ChannelHandler.Sharable
 class ServerHandler extends ChannelInboundHandlerAdapter {
 
   private final Logger logger = LoggerFactory.getLogger(getClass());

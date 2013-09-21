@@ -37,6 +37,7 @@ import io.netty.channel.oio.OioEventLoopGroup;
 import io.netty.channel.socket.ServerSocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.oio.OioServerSocketChannel;
+import io.netty.util.concurrent.EventExecutorGroup;
 
 import javax.inject.Inject;
 import java.net.SocketAddress;
@@ -49,23 +50,23 @@ public class RpcServer extends AbstractService {
   private final SocketAddress address;
 
   @Inject
-  <T extends ServerSocketChannel> RpcServer(EventLoopGroup eventLoopGroup, Class<T> channel, SocketAddress address) {
+  <T extends ServerSocketChannel> RpcServer(EventLoopGroup eventLoopGroup, EventExecutorGroup eventExecutor, Class<T> channel, SocketAddress address) {
     this.address = address;
     this.allChannels = new DefaultChannelGroup(eventLoopGroup.next());
     this.handler = new ServerHandler(allChannels);
     this.bootstrap = new ServerBootstrap();
     bootstrap.channel(channel);
-    bootstrap.childHandler(new Initializer(handler));
+    bootstrap.childHandler(new Initializer(eventExecutor, handler));
     bootstrap.group(eventLoopGroup);
   }
 
   @Inject
-  public RpcServer(NioEventLoopGroup eventLoopGroup, SocketAddress address) {
-    this(eventLoopGroup, NioServerSocketChannel.class ,address);
+  public RpcServer(NioEventLoopGroup eventLoopGroup, EventExecutorGroup eventExecutor, SocketAddress address) {
+    this(eventLoopGroup, eventExecutor, NioServerSocketChannel.class, address);
   }
 
-  public RpcServer(OioEventLoopGroup eventLoopGroup, SocketAddress address) {
-    this(eventLoopGroup, OioServerSocketChannel.class, address);
+  public RpcServer(OioEventLoopGroup eventLoopGroup, EventExecutorGroup eventExecutor, SocketAddress address) {
+    this(eventLoopGroup, eventExecutor, OioServerSocketChannel.class, address);
   }
 
   @Override

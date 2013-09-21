@@ -29,6 +29,7 @@ import io.netty.channel.oio.OioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.channel.socket.oio.OioSocketChannel;
+import io.netty.util.concurrent.EventExecutorGroup;
 
 import javax.inject.Inject;
 import java.net.SocketAddress;
@@ -37,19 +38,19 @@ public class RpcClient {
 
   private final Bootstrap bootstrap = new Bootstrap();
 
-  <T extends SocketChannel> RpcClient(EventLoopGroup eventLoopGroup, Class<T> channel) {
+  <T extends SocketChannel> RpcClient(EventLoopGroup eventLoopGroup, EventExecutorGroup eventExecutor, Class<T> channel) {
     bootstrap.group(eventLoopGroup);
     bootstrap.channel(channel);
-    bootstrap.handler(new Initializer<T>());
+    bootstrap.handler(new Initializer<T>(eventExecutor));
   }
 
   @Inject
-  public RpcClient(NioEventLoopGroup eventLoopGroup) {
-    this(eventLoopGroup, NioSocketChannel.class);
+  public RpcClient(NioEventLoopGroup eventLoopGroup, EventExecutorGroup eventExecutor) {
+    this(eventLoopGroup, eventExecutor, NioSocketChannel.class);
   }
 
-  public RpcClient(OioEventLoopGroup eventLoopGroup) {
-    this(eventLoopGroup, OioSocketChannel.class);
+  public RpcClient(OioEventLoopGroup eventLoopGroup, EventExecutorGroup eventExecutor) {
+    this(eventLoopGroup, eventExecutor, OioSocketChannel.class);
   }
 
   public NettyRpcChannel connect(SocketAddress sa) throws InterruptedException {

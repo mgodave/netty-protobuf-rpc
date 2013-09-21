@@ -22,6 +22,7 @@ package org.robotninjas.protobuf.netty.client;
  * THE SOFTWARE.
  */
 
+import io.netty.util.concurrent.EventExecutorGroup;
 import org.robotninjas.protobuf.netty.NettyRpcProto;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
@@ -36,6 +37,12 @@ import java.util.concurrent.ConcurrentHashMap;
 
 class Initializer<T extends SocketChannel> extends ChannelInitializer<T> {
 
+  private final EventExecutorGroup eventExecutor;
+
+  Initializer(EventExecutorGroup eventExecutor) {
+    this.eventExecutor = eventExecutor;
+  }
+
   @Override
   protected void initChannel(T ch) throws Exception {
     ChannelPipeline p = ch.pipeline();
@@ -47,7 +54,7 @@ class Initializer<T extends SocketChannel> extends ChannelInitializer<T> {
     p.addLast("protobufEncoder", new ProtobufEncoder());
 
     ConcurrentHashMap<Integer, RpcCall> callMap = new ConcurrentHashMap<Integer, RpcCall>();
-    p.addLast("inboundHandler", new InboundHandler(callMap));
+    p.addLast(eventExecutor, "inboundHandler", new InboundHandler(callMap));
     p.addLast("outboundHandler", new OutboundHandler(callMap));
 
   }
