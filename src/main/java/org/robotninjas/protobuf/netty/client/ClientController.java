@@ -38,14 +38,10 @@ public class ClientController implements RpcController {
     }
   }
 
-  void notifyFailed(String reason) {
-    this.failed = true;
-    this.errorText = reason;
-  }
-
   @Override
   public void setFailed(String reason) {
-    throw new UnsupportedOperationException("Can only be called from server");
+    this.failed = true;
+    this.errorText = reason;
   }
 
   @Override

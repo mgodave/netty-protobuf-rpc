@@ -7,13 +7,16 @@ import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.LengthFieldPrepender;
 import io.netty.handler.codec.protobuf.ProtobufDecoder;
 import io.netty.handler.codec.protobuf.ProtobufEncoder;
+import io.netty.util.concurrent.EventExecutorGroup;
 import org.robotninjas.protobuf.netty.NettyRpcProto;
 
 class Initializer<T extends SocketChannel> extends ChannelInitializer<T> {
 
+  private final EventExecutorGroup eventExecutor;
   private final ServerHandler handler;
 
-  Initializer(ServerHandler handler) {
+  Initializer(EventExecutorGroup eventExecutor, ServerHandler handler) {
+    this.eventExecutor = eventExecutor;
     this.handler = handler;
   }
 
@@ -27,7 +30,7 @@ class Initializer<T extends SocketChannel> extends ChannelInitializer<T> {
     p.addLast("frameEncoder", new LengthFieldPrepender(4));
     p.addLast("protobufEncoder", new ProtobufEncoder());
 
-    p.addLast("serverHandler", handler);
+    p.addLast(eventExecutor, "serverHandler", handler);
   }
 
 }
