@@ -25,6 +25,8 @@ import com.google.common.util.concurrent.*;
 import com.google.protobuf.*;
 import com.google.protobuf.Descriptors.MethodDescriptor;
 import io.netty.channel.Channel;
+import io.netty.util.concurrent.Future;
+import io.netty.util.concurrent.GenericFutureListener;
 import org.robotninjas.protobuf.netty.NettyRpcProto;
 
 import java.util.concurrent.ExecutionException;
@@ -32,6 +34,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.google.common.base.Throwables.propagate;
 import static com.google.common.util.concurrent.Futures.addCallback;
+import static org.robotninjas.protobuf.netty.NettyRpcProto.RpcRequest;
 
 public class NettyRpcChannel implements com.google.protobuf.RpcChannel, BlockingRpcChannel {
   private final Channel channel;
@@ -39,6 +42,12 @@ public class NettyRpcChannel implements com.google.protobuf.RpcChannel, Blocking
 
   NettyRpcChannel(Channel channel) {
     this.channel = channel;
+    channel.closeFuture().addListener(new GenericFutureListener<Future<Void>>() {
+      @Override
+      public void operationComplete(Future<Void> future) throws Exception {
+        future.getNow();
+      }
+    });
   }
 
   public boolean isOpen() {
@@ -105,8 +114,8 @@ public class NettyRpcChannel implements com.google.protobuf.RpcChannel, Blocking
     channel.close().awaitUninterruptibly();
   }
 
-  private NettyRpcProto.RpcRequest buildRequest(boolean isBlocking, MethodDescriptor method, Message request) {
-    NettyRpcProto.RpcRequest.Builder requestBuilder = NettyRpcProto.RpcRequest.newBuilder();
+  private RpcRequest buildRequest(boolean isBlocking, MethodDescriptor method, Message request) {
+    RpcRequest.Builder requestBuilder = RpcRequest.newBuilder();
     return requestBuilder
       .setId(sequence.incrementAndGet())
       .setIsBlockingService(isBlocking)

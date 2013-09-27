@@ -21,27 +21,31 @@
  */
 package org.googlecode.protobuf.netty.example;
 
-import org.robotninjas.protobuf.netty.server.RpcServer;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.util.concurrent.DefaultEventExecutorGroup;
+import io.netty.util.concurrent.EventExecutorGroup;
 import org.googlecode.protobuf.netty.example.Calculator.CalcService;
-import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
+import org.robotninjas.protobuf.netty.server.RpcServer;
 
 import java.net.InetSocketAddress;
-import java.util.concurrent.Executors;
+import java.net.SocketAddress;
 
 public class CalculatorServer {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 
-		RpcServer server = new RpcServer(
-				new NioServerSocketChannelFactory(
-						Executors.newCachedThreadPool(), 
-						Executors.newCachedThreadPool()));
+    NioEventLoopGroup eventLoopGroup = new NioEventLoopGroup(1);
+    EventExecutorGroup eventExecutorGroup = new DefaultEventExecutorGroup(1);
+    SocketAddress saddr = new InetSocketAddress("localhost", 8080);
+		RpcServer server = new RpcServer(eventLoopGroup, eventExecutorGroup, saddr);
 		
 		server.registerService(CalcService.newReflectiveService(new CalculatorServiceImpl()));
 		
 		server.registerBlockingService(CalcService.newReflectiveBlockingService(new CalculatorServiceImpl()));
-		
-		server.serve(new InetSocketAddress(8080));
+
+    server.startAndWait();
+
+    Thread.sleep(10000000);
 		
 	}
 	

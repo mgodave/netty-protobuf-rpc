@@ -23,6 +23,7 @@ package org.robotninjas.protobuf.netty.server;
 
 import com.google.common.base.Throwables;
 import com.google.common.util.concurrent.AbstractService;
+import com.google.inject.assistedinject.Assisted;
 import com.google.protobuf.BlockingService;
 import com.google.protobuf.Service;
 import io.netty.bootstrap.ServerBootstrap;
@@ -49,7 +50,6 @@ public class RpcServer extends AbstractService {
   private final ServerHandler handler;
   private final SocketAddress address;
 
-  @Inject
   <T extends ServerSocketChannel> RpcServer(EventLoopGroup eventLoopGroup, EventExecutorGroup eventExecutor, Class<T> channel, SocketAddress address) {
     this.address = address;
     this.allChannels = new DefaultChannelGroup(eventLoopGroup.next());
@@ -61,11 +61,11 @@ public class RpcServer extends AbstractService {
   }
 
   @Inject
-  public RpcServer(NioEventLoopGroup eventLoopGroup, EventExecutorGroup eventExecutor, SocketAddress address) {
+  public RpcServer(NioEventLoopGroup eventLoopGroup, EventExecutorGroup eventExecutor, @Assisted SocketAddress address) {
     this(eventLoopGroup, eventExecutor, NioServerSocketChannel.class, address);
   }
 
-  public RpcServer(OioEventLoopGroup eventLoopGroup, EventExecutorGroup eventExecutor, SocketAddress address) {
+  public RpcServer(OioEventLoopGroup eventLoopGroup, EventExecutorGroup eventExecutor, @Assisted SocketAddress address) {
     this(eventLoopGroup, eventExecutor, OioServerSocketChannel.class, address);
   }
 

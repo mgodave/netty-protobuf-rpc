@@ -203,6 +203,10 @@ class ServerHandler extends ChannelInboundHandlerAdapter {
     }
   }
 
+  @Override
+  public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+    logger.debug("Channel closed", ctx.channel().closeFuture().cause());
+  }
 
   private Message buildMessageFromPrototype(Message prototype, ByteString messageToBuild) throws InvalidProtocolBufferException {
     return prototype.newBuilderForType().mergeFrom(messageToBuild).build();
