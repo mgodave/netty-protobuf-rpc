@@ -6,8 +6,6 @@ import com.google.protobuf.RpcController;
 
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 class ServerController implements RpcController {
 
   private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
@@ -47,7 +45,6 @@ class ServerController implements RpcController {
 
   @Override
   public void setFailed(String reason) {
-    checkNotNull(reason);
     lock.writeLock().lock();
     try {
       failed = Optional.of(reason);
@@ -80,7 +77,6 @@ class ServerController implements RpcController {
 
   @Override
   public void notifyOnCancel(RpcCallback<Object> callback) {
-    checkNotNull(callback);
     lock.writeLock().lock();
     try {
       if (isCanceled()) {
