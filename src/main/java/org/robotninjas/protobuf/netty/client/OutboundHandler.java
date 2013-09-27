@@ -3,6 +3,8 @@ package org.robotninjas.protobuf.netty.client;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelOutboundHandlerAdapter;
 import io.netty.channel.ChannelPromise;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -11,6 +13,7 @@ import static org.robotninjas.protobuf.netty.NettyRpcProto.RpcContainer;
 
 class OutboundHandler extends ChannelOutboundHandlerAdapter {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(ChannelOutboundHandlerAdapter.class);
   private final ConcurrentHashMap<Integer, RpcCall> rpcMap;
 
   public OutboundHandler(ConcurrentHashMap<Integer, RpcCall> rpcMap) {
@@ -28,6 +31,11 @@ class OutboundHandler extends ChannelOutboundHandlerAdapter {
       RpcContainer.newBuilder()
         .setRequest(call.getRequest()));
 
+  }
+
+  @Override
+  public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+    LOGGER.debug("Exception caught", cause);
   }
 
 }
