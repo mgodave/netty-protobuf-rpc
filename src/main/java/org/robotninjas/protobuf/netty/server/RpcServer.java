@@ -29,6 +29,7 @@ import com.google.protobuf.Service;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
+import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.ChannelGroupFuture;
@@ -56,8 +57,9 @@ public class RpcServer extends AbstractService {
     this.handler = new ServerHandler(allChannels);
     this.bootstrap = new ServerBootstrap();
     bootstrap.channel(channel);
-    bootstrap.childHandler(new Initializer(eventExecutor, handler));
+    bootstrap.childHandler(new ServerInitializer(eventExecutor, handler));
     bootstrap.group(eventLoopGroup);
+    bootstrap.option(ChannelOption.TCP_NODELAY, true);
   }
 
   @Inject

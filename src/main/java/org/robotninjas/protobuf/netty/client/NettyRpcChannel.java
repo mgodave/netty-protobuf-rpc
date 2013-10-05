@@ -25,29 +25,23 @@ import com.google.common.util.concurrent.*;
 import com.google.protobuf.*;
 import com.google.protobuf.Descriptors.MethodDescriptor;
 import io.netty.channel.Channel;
-import io.netty.util.concurrent.Future;
-import io.netty.util.concurrent.GenericFutureListener;
 import org.robotninjas.protobuf.netty.NettyRpcProto;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static com.google.common.base.Strings.nullToEmpty;
 import static com.google.common.base.Throwables.propagate;
 import static com.google.common.util.concurrent.Futures.addCallback;
 import static org.robotninjas.protobuf.netty.NettyRpcProto.RpcRequest;
 
-public class NettyRpcChannel implements com.google.protobuf.RpcChannel, BlockingRpcChannel {
+public class NettyRpcChannel implements RpcChannel, BlockingRpcChannel {
+
   private final Channel channel;
   private final AtomicInteger sequence = new AtomicInteger(0);
 
   NettyRpcChannel(Channel channel) {
     this.channel = channel;
-    channel.closeFuture().addListener(new GenericFutureListener<Future<Void>>() {
-      @Override
-      public void operationComplete(Future<Void> future) throws Exception {
-        future.getNow();
-      }
-    });
   }
 
   public boolean isOpen() {
@@ -68,7 +62,7 @@ public class NettyRpcChannel implements com.google.protobuf.RpcChannel, Blocking
           Message result = builder.mergeFrom(input.getResponseMessage()).build();
           response.set(result);
         } catch (InvalidProtocolBufferException e) {
-          controller.setFailed(e.getMessage());
+          controller.setFailed(nullToEmpty(e.getMessage()));
           response.setException(e);
         }
         return response;
@@ -77,6 +71,7 @@ public class NettyRpcChannel implements com.google.protobuf.RpcChannel, Blocking
 
   }
 
+  @Override
   public void callMethod(
     MethodDescriptor method, final RpcController controller,
     Message request, Message responsePrototype, final RpcCallback<Message> done) {
@@ -89,13 +84,14 @@ public class NettyRpcChannel implements com.google.protobuf.RpcChannel, Blocking
       }
 
       public void onFailure(Throwable t) {
-        controller.setFailed(t.getMessage());
+        controller.setFailed(nullToEmpty(t.getMessage()));
         done.run(null);
       }
     });
 
   }
 
+  @Override
   public Message callBlockingMethod(
     MethodDescriptor method, RpcController controller, Message request,
     Message responsePrototype) throws ServiceException {
@@ -105,7 +101,7 @@ public class NettyRpcChannel implements com.google.protobuf.RpcChannel, Blocking
     } catch (InterruptedException e) {
       throw propagate(e);
     } catch (ExecutionException e) {
-      throw new ServiceException(e.getMessage());
+      throw new ServiceException(nullToEmpty(e.getMessage()));
     }
 
   }

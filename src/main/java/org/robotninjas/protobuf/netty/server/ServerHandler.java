@@ -36,6 +36,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.google.common.base.Strings.nullToEmpty;
 import static org.robotninjas.protobuf.netty.NettyRpcProto.RpcContainer;
 import static org.robotninjas.protobuf.netty.NettyRpcProto.RpcResponse;
 
@@ -152,7 +153,7 @@ class ServerHandler extends ChannelInboundHandlerAdapter {
                     .setId(request.getId())
                     .setResponseMessage(methodResponse.toByteString())));
             } else {
-              logger.info("service callback returned null message");
+              logger.debug("service callback returned null message");
               RpcResponse.Builder builder = RpcResponse.newBuilder()
                 .setId(request.getId())
                 .setErrorCode(NettyRpcProto.ErrorCode.RPC_ERROR);
@@ -190,16 +191,16 @@ class ServerHandler extends ChannelInboundHandlerAdapter {
     } else {
       /* Cannot respond to this exception, because it is not tied
        * to a request */
-      logger.info("Cannot respond to handler exception", cause);
+      logger.warn("Cannot respond to handler exception", cause);
       return;
     }
     RpcException ex = (RpcException) cause;
     if (ex.getRpcRequest() != null && ex.getRpcRequest().hasId()) {
       responseBuilder.setId(ex.getRpcRequest().getId());
-      responseBuilder.setErrorMessage(ex.getMessage());
+      responseBuilder.setErrorMessage(nullToEmpty(ex.getMessage()));
       ctx.channel().writeAndFlush(responseBuilder.build());
     } else {
-      logger.info("Cannot respond to handler exception", ex);
+      logger.warn("Cannot respond to handler exception", ex);
     }
   }
 
