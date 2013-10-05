@@ -21,8 +21,12 @@
  */
 package org.robotninjas.protobuf.netty.client;
 
+import com.google.common.util.concurrent.AbstractFuture;
+import com.google.common.util.concurrent.ListenableFuture;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
+import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.oio.OioEventLoopGroup;
@@ -41,7 +45,8 @@ public class RpcClient {
   <T extends SocketChannel> RpcClient(EventLoopGroup eventLoopGroup, EventExecutorGroup eventExecutor, Class<T> channel) {
     bootstrap.group(eventLoopGroup);
     bootstrap.channel(channel);
-    bootstrap.handler(new Initializer<T>(eventExecutor));
+    bootstrap.handler(new ClientInitializer<T>(eventExecutor));
+    bootstrap.option(ChannelOption.TCP_NODELAY, true);
   }
 
   @Inject
@@ -56,6 +61,29 @@ public class RpcClient {
   public NettyRpcChannel connect(SocketAddress sa) throws InterruptedException {
     ChannelFuture f = bootstrap.connect(sa).await();
     return new NettyRpcChannel(f.channel());
+  }
+
+  public ListenableFuture<NettyRpcChannel> connectAsync(SocketAddress sa) {
+    ChannelFuture channelFuture = bootstrap.connect(sa);
+    NettyFutureAdapter adapter = new NettyFutureAdapter();
+    channelFuture.addListener(adapter);
+    return adapter;
+  }
+
+  static final class NettyFutureAdapter
+    extends AbstractFuture<NettyRpcChannel>
+    implements ChannelFutureListener {
+
+    @Override
+    public void operationComplete(ChannelFuture future) throws Exception {
+      if (future.isDone() && future.isSuccess()) {
+        set(new NettyRpcChannel(future.channel()));
+      } else if (future.isDone() && future.cause() != null) {
+        setException(future.cause());
+      } else if (future.isDone() && future.isCancelled()) {
+        cancel(false);
+      }
+    }
   }
 
 }

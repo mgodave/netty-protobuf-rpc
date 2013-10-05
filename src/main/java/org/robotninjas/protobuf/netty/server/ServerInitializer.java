@@ -10,12 +10,12 @@ import io.netty.handler.codec.protobuf.ProtobufEncoder;
 import io.netty.util.concurrent.EventExecutorGroup;
 import org.robotninjas.protobuf.netty.NettyRpcProto;
 
-class Initializer<T extends SocketChannel> extends ChannelInitializer<T> {
+class ServerInitializer<T extends SocketChannel> extends ChannelInitializer<T> {
 
   private final EventExecutorGroup eventExecutor;
   private final ServerHandler handler;
 
-  Initializer(EventExecutorGroup eventExecutor, ServerHandler handler) {
+  ServerInitializer(EventExecutorGroup eventExecutor, ServerHandler handler) {
     this.eventExecutor = eventExecutor;
     this.handler = handler;
   }

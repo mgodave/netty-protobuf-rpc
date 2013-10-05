@@ -35,11 +35,11 @@ import io.netty.handler.codec.protobuf.ProtobufEncoder;
 import java.util.concurrent.ConcurrentHashMap;
 
 
-class Initializer<T extends SocketChannel> extends ChannelInitializer<T> {
+class ClientInitializer<T extends SocketChannel> extends ChannelInitializer<T> {
 
   private final EventExecutorGroup eventExecutor;
 
-  Initializer(EventExecutorGroup eventExecutor) {
+  ClientInitializer(EventExecutorGroup eventExecutor) {
     this.eventExecutor = eventExecutor;
   }
 
