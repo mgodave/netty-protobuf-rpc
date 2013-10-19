@@ -5,6 +5,7 @@ import com.google.protobuf.RpcController;
 
 import java.util.concurrent.TimeUnit;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 public class ClientController implements RpcController {
@@ -14,19 +15,17 @@ public class ClientController implements RpcController {
   private volatile boolean failed = false;
   private volatile boolean startCancelRequested;
   private volatile long timeout;
-  private volatile TimeUnit unit;
 
   public ClientController(NettyRpcChannel channel) {
-    this.channel = channel;
+    this.channel = checkNotNull(channel);
   }
 
   public void setTimeout(long timeout, TimeUnit unit) {
-    this.timeout = timeout;
-    this.unit = unit;
+    this.timeout = MILLISECONDS.convert(timeout, unit);
   }
 
   public long getTimeoutMillis() {
-    return MILLISECONDS.convert(timeout, unit);
+    return timeout;
   }
 
   @Override
