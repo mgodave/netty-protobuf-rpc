@@ -33,6 +33,7 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.ChannelGroupFuture;
+import io.netty.channel.group.ChannelGroupFutureListener;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.oio.OioEventLoopGroup;
@@ -95,9 +96,9 @@ public class RpcServer extends AbstractService {
   protected void doStop() {
     try {
       ChannelGroupFuture f = allChannels.close();
-      f.addListener(new ChannelFutureListener() {
+      f.addListener(new ChannelGroupFutureListener() {
         @Override
-        public void operationComplete(ChannelFuture future) throws Exception {
+        public void operationComplete(ChannelGroupFuture future) throws Exception {
           if (future.isSuccess()) {
             notifyStopped();
           } else {
