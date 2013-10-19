@@ -3,7 +3,7 @@
     <groupId>org.robotninjas</groupId>
     <artifactId>netty-protobuf-rpc</artifactId>
     <packaging>jar</packaging>
-    <version>2.0.0</version>
+    <version>2.0.1-SNAPSHOT</version>
     <name>Netty Protobuf RPC Implementation</name>
 
     <licenses>
