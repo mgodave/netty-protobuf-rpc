@@ -23,20 +23,12 @@
     </scm>
 
     <developers>
+        <!-- I don't know who the original developer was, it you have an idea, submit a PR -->
         <developer>
             <name>Dave Rusek</name>
             <email>dave.rusek@gmail.com</email>
         </developer>
     </developers>
-
-    <distributionManagement>
-        <repository>
-            <id>bintray-mgodave-robotninjas-netty-protobuf-rpc</id>
-            <name>mgodave-robotninjas-netty-protobuf-rpc</name>
-            <url>https://api.bintray.com/maven/mgodave/robotninjas/netty-protobuf-rpc</url>
-        </repository>
-    </distributionManagement>
-
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -57,6 +49,7 @@
     </build>
 
     <dependencies>
+
         <dependency>
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
@@ -65,7 +58,7 @@
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
-            <version>4.0.9.Final</version>
+            <version>4.0.11.Final</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -77,12 +70,13 @@
             <artifactId>slf4j-api</artifactId>
             <version>1.7.5</version>
         </dependency>
+
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>1.0.11</version>
             <scope>runtime</scope>
-            <!--<optional>true</optional>-->
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>com.google.inject</groupId>
@@ -96,6 +90,7 @@
             <version>3.0</version>
             <optional>true</optional>
         </dependency>
+
     </dependencies>
 
 </project>
