@@ -1,5 +1,6 @@
 package org.robotninjas.protobuf.netty.server;
 
+import com.google.common.base.Optional;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
@@ -12,12 +13,20 @@ import org.robotninjas.protobuf.netty.NettyRpcProto;
 
 class ServerInitializer<T extends SocketChannel> extends ChannelInitializer<T> {
 
-  private final EventExecutorGroup eventExecutor;
+  private final Optional<EventExecutorGroup> eventExecutor;
   private final ServerHandler handler;
 
-  ServerInitializer(EventExecutorGroup eventExecutor, ServerHandler handler) {
+  private ServerInitializer(Optional<EventExecutorGroup> eventExecutor, ServerHandler handler) {
     this.eventExecutor = eventExecutor;
     this.handler = handler;
+  }
+
+  ServerInitializer(EventExecutorGroup eventExecutor, ServerHandler handler) {
+    this(Optional.of(eventExecutor), handler);
+  }
+
+  ServerInitializer(ServerHandler handler) {
+    this(Optional.<EventExecutorGroup>absent(), handler);
   }
 
   @Override
@@ -30,7 +39,11 @@ class ServerInitializer<T extends SocketChannel> extends ChannelInitializer<T> {
     p.addLast("frameEncoder", new LengthFieldPrepender(4));
     p.addLast("protobufEncoder", new ProtobufEncoder());
 
-    p.addLast(eventExecutor, "serverHandler", handler);
+    if (eventExecutor.isPresent()) {
+      p.addLast(eventExecutor.get(), "serverHandler", handler);
+    } else {
+      p.addLast("serverHandler", handler);
+    }
   }
 
 }

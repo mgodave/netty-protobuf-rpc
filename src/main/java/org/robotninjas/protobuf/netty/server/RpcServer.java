@@ -21,6 +21,7 @@
  */
 package org.robotninjas.protobuf.netty.server;
 
+import com.google.common.base.Optional;
 import com.google.common.base.Throwables;
 import com.google.common.util.concurrent.AbstractService;
 import com.google.inject.assistedinject.Assisted;
@@ -52,24 +53,37 @@ public class RpcServer extends AbstractService {
   private final ServerHandler handler;
   private final SocketAddress address;
 
-  <T extends ServerSocketChannel> RpcServer(EventLoopGroup eventLoopGroup, EventExecutorGroup eventExecutor, Class<T> channel, SocketAddress address) {
+  <T extends ServerSocketChannel> RpcServer(EventLoopGroup eventLoopGroup, Optional<EventExecutorGroup> eventExecutor, Class<T> channel, SocketAddress address) {
     this.address = address;
     this.allChannels = new DefaultChannelGroup(eventLoopGroup.next());
     this.handler = new ServerHandler(allChannels);
     this.bootstrap = new ServerBootstrap();
     bootstrap.channel(channel);
-    bootstrap.childHandler(new ServerInitializer(eventExecutor, handler));
+    if (eventExecutor.isPresent()) {
+      bootstrap.childHandler(new ServerInitializer(eventExecutor.get(), handler));
+    } else {
+      bootstrap.childHandler(new ServerInitializer(handler));
+    }
     bootstrap.group(eventLoopGroup);
     bootstrap.option(ChannelOption.TCP_NODELAY, true);
   }
 
   @Inject
   public RpcServer(NioEventLoopGroup eventLoopGroup, EventExecutorGroup eventExecutor, @Assisted SocketAddress address) {
-    this(eventLoopGroup, eventExecutor, NioServerSocketChannel.class, address);
+    this(eventLoopGroup, Optional.of(eventExecutor), NioServerSocketChannel.class, address);
   }
 
   public RpcServer(OioEventLoopGroup eventLoopGroup, EventExecutorGroup eventExecutor, @Assisted SocketAddress address) {
-    this(eventLoopGroup, eventExecutor, OioServerSocketChannel.class, address);
+    this(eventLoopGroup, Optional.of(eventExecutor), OioServerSocketChannel.class, address);
+  }
+
+  @Inject
+  public RpcServer(NioEventLoopGroup eventLoopGroup, @Assisted SocketAddress address) {
+    this(eventLoopGroup, Optional.<EventExecutorGroup>absent(), NioServerSocketChannel.class, address);
+  }
+
+  public RpcServer(OioEventLoopGroup eventLoopGroup, @Assisted SocketAddress address) {
+    this(eventLoopGroup, Optional.<EventExecutorGroup>absent(), OioServerSocketChannel.class, address);
   }
 
   @Override
