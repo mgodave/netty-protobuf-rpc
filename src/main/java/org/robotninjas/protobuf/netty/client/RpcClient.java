@@ -21,6 +21,7 @@
  */
 package org.robotninjas.protobuf.netty.client;
 
+import com.google.common.base.Optional;
 import com.google.common.util.concurrent.AbstractFuture;
 import com.google.common.util.concurrent.ListenableFuture;
 import io.netty.bootstrap.Bootstrap;
@@ -35,27 +36,37 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.channel.socket.oio.OioSocketChannel;
 import io.netty.util.concurrent.EventExecutorGroup;
 
-import javax.inject.Inject;
 import java.net.SocketAddress;
 
 public class RpcClient {
 
   private final Bootstrap bootstrap = new Bootstrap();
 
-  <T extends SocketChannel> RpcClient(EventLoopGroup eventLoopGroup, EventExecutorGroup eventExecutor, Class<T> channel) {
+  <T extends SocketChannel> RpcClient(EventLoopGroup eventLoopGroup, Optional<EventExecutorGroup> eventExecutor, Class<T> channel) {
     bootstrap.group(eventLoopGroup);
     bootstrap.channel(channel);
-    bootstrap.handler(new ClientInitializer<T>(eventExecutor));
+    if (eventExecutor.isPresent()) {
+      bootstrap.handler(new ClientInitializer<T>(eventExecutor.get()));
+    } else {
+      bootstrap.handler(new ClientInitializer<T>());
+    }
     bootstrap.option(ChannelOption.TCP_NODELAY, true);
   }
 
-  @Inject
   public RpcClient(NioEventLoopGroup eventLoopGroup, EventExecutorGroup eventExecutor) {
-    this(eventLoopGroup, eventExecutor, NioSocketChannel.class);
+    this(eventLoopGroup, Optional.of(eventExecutor), NioSocketChannel.class);
   }
 
   public RpcClient(OioEventLoopGroup eventLoopGroup, EventExecutorGroup eventExecutor) {
-    this(eventLoopGroup, eventExecutor, OioSocketChannel.class);
+    this(eventLoopGroup, Optional.of(eventExecutor), OioSocketChannel.class);
+  }
+
+  public RpcClient(NioEventLoopGroup eventLoopGroup) {
+    this(eventLoopGroup, Optional.<EventExecutorGroup>absent(), NioSocketChannel.class);
+  }
+
+  public RpcClient(OioEventLoopGroup eventLoopGroup) {
+    this(eventLoopGroup, Optional.<EventExecutorGroup>absent(), OioSocketChannel.class);
   }
 
   public NettyRpcChannel connect(SocketAddress sa) throws InterruptedException {
@@ -65,14 +76,18 @@ public class RpcClient {
 
   public ListenableFuture<NettyRpcChannel> connectAsync(SocketAddress sa) {
     ChannelFuture channelFuture = bootstrap.connect(sa);
-    NettyFutureAdapter adapter = new NettyFutureAdapter();
-    channelFuture.addListener(adapter);
-    return adapter;
+    return NettyFutureAdapter.adapt(channelFuture);
   }
 
-  static final class NettyFutureAdapter
+  private static final class NettyFutureAdapter
     extends AbstractFuture<NettyRpcChannel>
     implements ChannelFutureListener {
+
+    private ChannelFuture future;
+
+    private NettyFutureAdapter(ChannelFuture future) {
+      this.future = future;
+    }
 
     @Override
     public void operationComplete(ChannelFuture future) throws Exception {
@@ -84,6 +99,18 @@ public class RpcClient {
         cancel(false);
       }
     }
+
+    @Override
+    protected void interruptTask() {
+      future.cancel(true);
+    }
+
+    public static ListenableFuture<NettyRpcChannel> adapt(ChannelFuture f) {
+      NettyFutureAdapter adapter = new NettyFutureAdapter(f);
+      f.addListener(adapter);
+      return adapter;
+    }
+
   }
 
 }

@@ -22,6 +22,7 @@ package org.robotninjas.protobuf.netty.client;
  * THE SOFTWARE.
  */
 
+import com.google.common.base.Optional;
 import io.netty.util.concurrent.EventExecutorGroup;
 import org.robotninjas.protobuf.netty.NettyRpcProto;
 import io.netty.channel.ChannelInitializer;
@@ -37,10 +38,18 @@ import java.util.concurrent.ConcurrentHashMap;
 
 class ClientInitializer<T extends SocketChannel> extends ChannelInitializer<T> {
 
-  private final EventExecutorGroup eventExecutor;
+  private final Optional<EventExecutorGroup> eventExecutor;
+
+  private ClientInitializer(Optional<EventExecutorGroup> eventExecutor) {
+    this.eventExecutor = eventExecutor;
+  }
+
+  ClientInitializer() {
+    this(Optional.<EventExecutorGroup>absent());
+  }
 
   ClientInitializer(EventExecutorGroup eventExecutor) {
-    this.eventExecutor = eventExecutor;
+    this(Optional.of(eventExecutor));
   }
 
   @Override
@@ -54,7 +63,12 @@ class ClientInitializer<T extends SocketChannel> extends ChannelInitializer<T> {
     p.addLast("protobufEncoder", new ProtobufEncoder());
 
     ConcurrentHashMap<Integer, RpcCall> callMap = new ConcurrentHashMap<Integer, RpcCall>();
-    p.addLast(eventExecutor, "inboundHandler", new InboundHandler(callMap));
+    InboundHandler handler = new InboundHandler(callMap);
+    if (eventExecutor.isPresent()) {
+      p.addLast(eventExecutor.get(), "inboundHandler", handler);
+    } else {
+      p.addLast("inboundHandler", handler);
+    }
     p.addLast("outboundHandler", new OutboundHandler(callMap));
 
   }
