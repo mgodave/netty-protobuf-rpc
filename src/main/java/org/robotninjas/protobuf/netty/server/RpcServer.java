@@ -28,6 +28,7 @@ import com.google.inject.assistedinject.Assisted;
 import com.google.protobuf.BlockingService;
 import com.google.protobuf.Service;
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelOption;
@@ -94,6 +95,8 @@ public class RpcServer extends AbstractService {
         @Override
         public void operationComplete(ChannelFuture future) throws Exception {
           if (future.isSuccess()) {
+            Channel serverChannel = future.channel();
+            allChannels.add(serverChannel);
             notifyStarted();
           } else {
             notifyFailed(future.cause());
