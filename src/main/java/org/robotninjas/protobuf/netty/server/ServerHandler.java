@@ -33,6 +33,7 @@ import org.robotninjas.protobuf.netty.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.SocketAddress;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -103,7 +104,8 @@ class ServerHandler extends ChannelInboundHandlerAdapter {
         } catch (InvalidProtocolBufferException ex) {
           throw new InvalidRpcRequestException(ex, request, "Could not build method request message");
         }
-        ServerController controller = new ServerController();
+        SocketAddress remoteAddress = ctx.channel().remoteAddress();
+        ServerController controller = new ServerController(remoteAddress);
         controllers.put(request.getId(), controller);
         Message methodResponse = null;
         try {
@@ -142,7 +144,8 @@ class ServerHandler extends ChannelInboundHandlerAdapter {
           throw new InvalidRpcRequestException(ex, request, "Could not build method request message");
         }
         final Channel channel = ctx.channel();
-        final ServerController controller = new ServerController();
+        SocketAddress remoteAddress = channel.remoteAddress();
+        final ServerController controller = new ServerController(remoteAddress);
         controllers.put(request.getId(), controller);
         RpcCallback<Message> callback = !request.hasId() ? null : new RpcCallback<Message>() {
           public void run(Message methodResponse) {
