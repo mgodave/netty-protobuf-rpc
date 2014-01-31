@@ -81,6 +81,13 @@ class ServerController implements RpcController {
     try {
       if (isCanceled()) {
         callback.run(null);
+      } else {
+        if (this.callback.isPresent()) {
+          // This once-only limitation is allowed by the RpcController contract.
+          throw new IllegalStateException("Can only call notifyOnCancel once");
+        } else {
+          this.callback = Optional.of(callback);
+        }
       }
     } finally {
       lock.writeLock().unlock();
