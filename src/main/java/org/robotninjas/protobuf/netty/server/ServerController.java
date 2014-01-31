@@ -1,17 +1,32 @@
 package org.robotninjas.protobuf.netty.server;
 
+import java.net.SocketAddress;
+
+import org.robotninjas.protobuf.RpcContext;
+
 import com.google.common.base.Optional;
 import com.google.protobuf.RpcCallback;
 import com.google.protobuf.RpcController;
 
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-class ServerController implements RpcController {
+class ServerController implements RpcController, RpcContext {
+
+  private final SocketAddress remote;
 
   private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
   private volatile boolean canceled = false;
   private volatile Optional<String> failed = Optional.absent();
   private volatile Optional<RpcCallback<Object>> callback = Optional.absent();
+
+  public ServerController(SocketAddress remote) {
+    this.remote = remote;
+  }
+
+  @Override
+  public SocketAddress getRemote() {
+    return remote;
+  }
 
   @Override
   public void reset() {
