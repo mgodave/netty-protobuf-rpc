@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -e
+
+if [[ "$CI_DEPLOY_USER" == "" ]]; then
+    echo "CI_DEPLOY_USER not set; skipping" >& 2
+    exit 1
+fi
+
+echo "Running Maven deploy"
+exec mvn deploy --settings target/travis/settings.xml
+
