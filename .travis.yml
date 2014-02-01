@@ -1,5 +1,4 @@
 language: java
-before_install: "git clone -b travis `git config --get remote.origin.url` target/travis"
 script: "mvn package"
 after_success:
     - ./etc/success.sh
