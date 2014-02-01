@@ -5,6 +5,7 @@ jdk:
     - openjdk6
     - openjdk7
     - sunjdk7
+    - oraclejdk8
 
 branches:
     only:
