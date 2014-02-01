@@ -8,5 +8,5 @@ if [[ "$CI_DEPLOY_USER" == "" ]]; then
 fi
 
 echo "Running Maven deploy"
-exec mvn deploy --settings target/travis/settings.xml
+exec mvn deploy --settings etc/deploy_settings.xml
 
