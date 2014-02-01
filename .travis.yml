@@ -4,7 +4,6 @@ script: "mvn deploy --settings target/travis/settings.xml"
 jdk:
     - openjdk6
     - openjdk7
-    - sunjdk6
     - sunjdk7
 
 branches:
