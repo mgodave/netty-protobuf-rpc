@@ -2,8 +2,8 @@
 
 set -e
 
-if [[ "$CI_DEPLOY_USER" == "" ]]; then
-    echo "CI_DEPLOY_USER not set; skipping" >& 2
+if [[ "$CI_DEPLOY_USERNAME" == "" ]]; then
+    echo "CI_DEPLOY_USERNAME not set; skipping" >& 2
     exit 1
 fi
 
