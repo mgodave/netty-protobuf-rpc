@@ -54,7 +54,7 @@ public class NettyRpcChannel implements RpcChannel, BlockingRpcChannel {
 
     ListenableFuture<NettyRpcProto.RpcResponse> result = new RpcCall(buildRequest(blocking, method, request));
     channel.writeAndFlush(result);
-    return Futures.transform(result, new AsyncFunction<NettyRpcProto.RpcResponse, Message>() {
+    return Futures.transformAsync(result, new AsyncFunction<NettyRpcProto.RpcResponse, Message>() {
       public ListenableFuture<Message> apply(NettyRpcProto.RpcResponse input) {
         SettableFuture<Message> response = SettableFuture.create();
         try {
